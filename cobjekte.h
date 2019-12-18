@@ -8,6 +8,7 @@
 #include "shader.h"
 
 // amk git
+//amk git test2
 class cObjekte : public Drawable
 {
 public:
