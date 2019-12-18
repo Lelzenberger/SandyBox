@@ -2,15 +2,14 @@
 #define CWUERFEL_H
 
 #include "cobjekte.h"
-#include "simplecube.h"
 
 class cWuerfel : public cObjekte
 {
 public:
-    cWuerfel(float fSize);
+    cWuerfel();
     ~cWuerfel();
-private:
-    Drawable * m_drawable;
+    void init(float fSize, Shader* s);
+
 };
 
 #endif // CWUERFEL_H

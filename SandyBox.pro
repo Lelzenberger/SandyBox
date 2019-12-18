@@ -6,6 +6,7 @@ SOURCES += \
     ckugel.cpp \
     cobjekte.cpp \
     cspieler.cpp \
+    cszene.cpp \
     cwelt.cpp \
     cwuerfel.cpp \
     myscene.cpp \
@@ -14,6 +15,7 @@ HEADERS += \
     ckugel.h \
     cobjekte.h \
     cspieler.h \
+    cszene.h \
     cwelt.h \
     cwuerfel.h
 

@@ -1,18 +1,14 @@
 #ifndef CWELT_H
 #define CWELT_H
 
-
-#include "drawable.h"
-#include "simpleplane.h"
 #include "cobjekte.h"
 
 class cWelt :public cObjekte
 {
 public:
-    cWelt(float fSize);
+    cWelt();
     ~cWelt();
-private:
-    Drawable * m_drawable;
+    void init(float fSize, Shader* s);
 };
 
 #endif // CWELT_H
