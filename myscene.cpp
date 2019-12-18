@@ -22,7 +22,6 @@ void SceneManager::initScenes()
 Node* initScene1()
 {
 
-
     cSpieler* Spieler = new cSpieler();
     Spieler->setCamera(cam);
     cSzene *sz = new cSzene();
