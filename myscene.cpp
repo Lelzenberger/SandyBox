@@ -40,8 +40,6 @@ Node* initScene1()
     sl->turnOn();
     tWelt->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
     tSl->translate(-100.0f, 50.0f, 100.0f);
-	tSl->translate(200.0f, 50.0f, 100.0f);
-	tSl->translate(-200.0f, 50.0f, 100.0f);
     tSl->rotate(-20.0f, 1.0f, 0.0f, 1.0f);
     tSl->rotate(-45.0f, 0.0f, 1.0f, 0.0f);
     Node *root = new Node();
