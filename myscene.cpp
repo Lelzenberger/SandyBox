@@ -6,27 +6,27 @@
 #include "cwelt.h"
 #include "transformation.h"
 #include "spotlight.h"
-
+#include "cspieler.h"
 Node* initScene1();
+Camera * cam = new Camera();
 
 void SceneManager::initScenes()
 {
-    Camera* cam = new Camera();
-    CameraController* camController = new MouseKeyboardCameraController(cam);
-    camController->setRotSpeed(0.2f);
-    camController->setMoveSpeed(0.5f);
-    cam->lockZRotation();
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
     ScreenRenderer* myRenderer = new ScreenRenderer(myContextNr, myScene);
     Q_UNUSED(myRenderer)
     SceneManager::instance()->setActiveScene(myScene);
-    SceneManager::instance()->setActiveContext(myContextNr);  
+    SceneManager::instance()->setActiveContext(myContextNr);
+
 }
 
 Node* initScene1()
 {
+
+    cSpieler* Spieler = new cSpieler();
+    Spieler->setCamera(cam);
     QString path(SRCDIR);
     cWuerfel *wuerfel = new cWuerfel(1.0f);
     cWuerfel *sonne = new cWuerfel(1.0f);

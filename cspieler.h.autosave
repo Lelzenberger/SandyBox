@@ -3,8 +3,9 @@
 
 #include "camera.h"
 #include "listener.h"
+#include "camera.h"
 
-class cSpieler : public Listener
+class cSpieler : public Listener, public Camera
 {
 public:
     cSpieler();
