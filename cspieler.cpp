@@ -2,8 +2,6 @@
 
 cSpieler::cSpieler()
 {
-    cam = new Camera();
-    cam->lockZRotation();
 
 }
 
@@ -49,6 +47,7 @@ void cSpieler::keyboard(int key, int /*modifier*/)
 void cSpieler::setCamera(Camera *camera)
 {
     cam = camera;
+     cam->lockZRotation();
 }
 
 Camera *cSpieler::getCamera()

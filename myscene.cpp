@@ -5,10 +5,11 @@
 #include "cszene.h"
 
 Node* initScene1();
-Camera * cam = new Camera();
+Camera * cam;
 
 void SceneManager::initScenes()
 {
+    cam = new Camera();
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
