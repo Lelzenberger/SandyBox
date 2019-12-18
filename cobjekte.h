@@ -7,6 +7,7 @@
 #include "material.h"
 #include "shader.h"
 
+// amk git
 class cObjekte : public Drawable
 {
 public:
