@@ -9,6 +9,7 @@
 
 // amk git
 //amk git test2
+//amk test git 3
 class cObjekte : public Drawable
 {
 public:
