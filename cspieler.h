@@ -3,9 +3,9 @@
 
 #include "camera.h"
 #include "cameracontroller.h"
-#include "listener.h"
+#include "keyboardinput.h"
 
-class cSpieler : public CameraController, public Listener
+class cSpieler : public CameraController
 {
 public:
     cSpieler(Camera * camera);
@@ -21,11 +21,14 @@ private:
     const float m_Height = 1.0f;
     QVector2D m_mouseMoveVector;
 
-    void keyboard(int, int) override;
+    void isPressed();
     PhysicObject * getObjectInViewDirection();
     void moveObject();
     void scaleObject();
     PhysicObject* v_PhysicObject;
+    PhysicObject * ObjectToMove;
+    KeyboardInput* keyIn;
+
 protected:
     virtual void controlCamera() override;
 

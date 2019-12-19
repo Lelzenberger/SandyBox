@@ -12,7 +12,7 @@ cSpieler::cSpieler(Camera * camera) : CameraController(camera)
     m_cam = camera;
     m_cam->lockZRotation();
     CameraController::setMoveSpeed(0.5f * 0.1f);
-
+    keyIn = InputRegistry::getInstance().getKeyboardInput();
 }
 
 cSpieler::~cSpieler()
@@ -51,7 +51,7 @@ PhysicObject* cSpieler::getObjectInViewDirection()
 
 void cSpieler::moveObject()
 {
-    PhysicObject * ObjectToMove = getObjectInViewDirection();
+    ObjectToMove = getObjectInViewDirection();
 
     if ( ObjectToMove != nullptr )
     {
@@ -68,28 +68,30 @@ void cSpieler::moveObject()
 
 void cSpieler::scaleObject()
 {
-    PhysicObject * ObjectToMove = getObjectInViewDirection();
+    ObjectToMove = getObjectInViewDirection();
 
      if ( ObjectToMove != nullptr  )
      {
-        qDebug("%f | %f", m_mouseMoveVector.x(), m_mouseMoveVector.y());
+        QMatrix4x4 Scale = QMatrix4x4(5,0,0,0,
+                                      0,5,0,0,
+                                      0,0,5,0,
+                                      0,0,0,5);
         QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
-        matrixObjekt.scale(m_mouseMoveVector.x());
+        matrixObjekt =   Scale * matrixObjekt ;
         ObjectToMove->setEngineModelMatrix(matrixObjekt);
     }
 }
 
 
-void cSpieler::keyboard(int key, int)
+void cSpieler::isPressed()
 {
-//    qDebug("%i",key);
-    switch(key)
+    if (keyIn->isKeyPressed('e'))
     {
-        case 101:
-        {
-            moveObject();
-            break;
-        }
+        moveObject();
+    }
+    if (keyIn->isKeyPressed('q'))
+    {
+        scaleObject();
     }
 }
 
@@ -97,11 +99,11 @@ void cSpieler::keyboard(int key, int)
 void cSpieler::controlCamera()
 {
 
-
+    isPressed();
 //---- KEYBOARD STEUERUNG
     QVector3D deltaPosition;
 
-    KeyboardInput* keyIn = InputRegistry::getInstance().getKeyboardInput();
+    keyIn = InputRegistry::getInstance().getKeyboardInput();
     if (keyIn->isKeyPressed('w'))
     {
         deltaPosition += mCamera->getViewDir() * mMoveSpeed;
