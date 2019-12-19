@@ -48,3 +48,8 @@ void cObjekte::setShader(Shader *s)
 {
     m_shader = s;
 }
+
+Drawable * cObjekte::returnDrawable()
+{
+    return  m_drawable;
+}

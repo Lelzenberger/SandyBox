@@ -22,14 +22,15 @@ Node* cSzene::init()
     int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
     PhysicEngine* v_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
 
-    cWuerfel *wuerfel[2];
-    Transformation *tWuerfel[2];
-    PhysicObject* v_PhysicObjects[2];
-    Node* nWuerfel[2];
+#define wuerfelCount 5
+    cWuerfel *wuerfel[wuerfelCount];
+    Transformation *tWuerfel[wuerfelCount];
+    PhysicObject* v_PhysicObjects[wuerfelCount];
+    Node* nWuerfel[wuerfelCount];
 
     Shader *s = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
 
-    for (int i = 0; i <= 2; i++)
+    for (int i = 0; i < wuerfelCount; i++)
     {
         tWuerfel[i] = new Transformation();
         tWuerfel[i]->translate(0.0f,((float)i + 0.25f) * 2.f, 0.f);
@@ -51,7 +52,7 @@ Node* cSzene::init()
 
 
 
-        v_PhysicObjects[i] = v_PhysicEngine->createNewPhysicObject(wuerfel[i]);
+        v_PhysicObjects[i] = v_PhysicEngine->createNewPhysicObject(wuerfel[i]->returnDrawable());
         PhysicObjectConstructionInfo* v_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
         v_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f)); // Ausdehnung des Würfels in
                                                                                         // halber länge angeben
@@ -95,7 +96,8 @@ Node* cSzene::init()
     tWelt->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
     Node* tnWelt = new Node(tWelt);
     Node* nWelt = new Node(welt->getRoot());
-    PhysicObject* weltPhys = v_PhysicEngine->createNewPhysicObject(welt);
+    welt->returnDrawable()->setStaticGeometry(true);
+    PhysicObject* weltPhys = v_PhysicEngine->createNewPhysicObject(welt->returnDrawable());
     PhysicObjectConstructionInfo* constrinfWelt = new PhysicObjectConstructionInfo();
     constrinfWelt->setCollisionHull(CollisionHull::BoxAABB); // Automatische generierung einer Box aus den Vertexpunkten
     weltPhys->setConstructionInfo(constrinfWelt);

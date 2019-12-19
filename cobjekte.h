@@ -21,7 +21,7 @@ public:
     void setMaterialShininess(float s);
     void init();
     void setShader(Shader *s);
-
+    Drawable * returnDrawable();
 protected:
     Node *m_root, *m_objektNode;
     Material *m_material;
