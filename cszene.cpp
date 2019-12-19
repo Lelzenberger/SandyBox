@@ -13,6 +13,11 @@ cSzene::cSzene()
 
 }
 
+PhysicEngine* cSzene::getPhysicEngine()
+{
+    return m_PhysicEngine;
+}
+
 Node* cSzene::init()
 {
     root = new Node(new Transformation);
@@ -20,7 +25,7 @@ Node* cSzene::init()
     QString path(SRCDIR);
 
     int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
-    PhysicEngine* v_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
+    m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
 
 #define wuerfelCount 5
     cWuerfel *wuerfel[wuerfelCount];
@@ -52,7 +57,7 @@ Node* cSzene::init()
 
 
 
-        v_PhysicObjects[i] = v_PhysicEngine->createNewPhysicObject(wuerfel[i]->returnDrawable());
+        v_PhysicObjects[i] = m_PhysicEngine->createNewPhysicObject(wuerfel[i]->returnDrawable());
         PhysicObjectConstructionInfo* v_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
         v_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f)); // Ausdehnung des Würfels in
                                                                                         // halber länge angeben
@@ -97,7 +102,7 @@ Node* cSzene::init()
     Node* tnWelt = new Node(tWelt);
     Node* nWelt = new Node(welt->getRoot());
     welt->returnDrawable()->setStaticGeometry(true);
-    PhysicObject* weltPhys = v_PhysicEngine->createNewPhysicObject(welt->returnDrawable());
+    PhysicObject* weltPhys = m_PhysicEngine->createNewPhysicObject(welt->returnDrawable());
     PhysicObjectConstructionInfo* constrinfWelt = new PhysicObjectConstructionInfo();
     constrinfWelt->setCollisionHull(CollisionHull::BoxAABB); // Automatische generierung einer Box aus den Vertexpunkten
     weltPhys->setConstructionInfo(constrinfWelt);
