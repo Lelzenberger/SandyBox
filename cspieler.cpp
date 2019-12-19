@@ -19,10 +19,16 @@ cSpieler::~cSpieler()
 }
 
 
+
+
+
 void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
 {
     m_PhysicEngine = PhysicEngine;
 }
+
+
+
 
 
 PhysicObject* cSpieler::getObjectInViewDirection()
@@ -39,22 +45,38 @@ PhysicObject* cSpieler::getObjectInViewDirection()
     return nullptr;
 }
 
-void cSpieler::moveObjekt()
+
+
+void cSpieler::moveObject()
 {
     PhysicObject * ObjectToMove = getObjectInViewDirection();
 
-    if (ObjectToMove != 0)
+    if ( ObjectToMove )
     {
         QVector3D camPos = m_cam->getPosition();
         QVector3D lookDirection = m_cam->getViewDir();
 
-        QMatrix4x4 v_Matrix = ObjectToMove->getEngineModelMatrix();
-        v_Matrix.setColumn(3, (camPos + 10 * lookDirection).toVector4D());
-        ObjectToMove->setEngineModelMatrix(v_Matrix);
+        QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
+        matrixObjekt.setColumn(3, (camPos + 10 * lookDirection).toVector4D());
+        ObjectToMove->setEngineModelMatrix(matrixObjekt);
         ObjectToMove->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
     }
 
 }
+
+void cSpieler::scaleObject()
+{
+    PhysicObject * ObjectToMove = getObjectInViewDirection();
+
+     if ( ObjectToMove )
+     {
+        qDebug("%f | %f", m_mouseMoveVector.x(), m_mouseMoveVector.y());
+        QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
+        matrixObjekt.scale(m_mouseMoveVector.x()* 0.5f);
+        ObjectToMove->setEngineModelMatrix(matrixObjekt);
+    }
+}
+
 
 void cSpieler::keyboard(int key, int)
 {
@@ -63,13 +85,12 @@ void cSpieler::keyboard(int key, int)
     {
         case 101:
         {
-            moveObjekt();
+            moveObject();
             break;
         }
-        case 103:
+        case 113:
         {
-
-
+            scaleObject();
             break;
         }
 
