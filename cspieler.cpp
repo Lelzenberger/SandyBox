@@ -59,7 +59,7 @@ void cSpieler::moveObject()
         QVector3D lookDirection = m_cam->getViewDir();
 
         QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
-        matrixObjekt.setColumn(3, (camPos + 10 * lookDirection).toVector4D());
+        matrixObjekt.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
         ObjectToMove->setEngineModelMatrix(matrixObjekt);
         ObjectToMove->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
     }
