@@ -39,7 +39,7 @@ PhysicObject* cSpieler::getObjectInViewDirection()
     {
          QVector3D camPos = m_cam->getPosition();
          QVector3D lookDirection = m_cam->getViewDir();
-         PhysicObject* v_PhysicObject = m_PhysicEngine->rayTestClosestBody(camPos, camPos + 100 * lookDirection);
+         v_PhysicObject = m_PhysicEngine->rayTestClosestBody(camPos, camPos + 100 * lookDirection);
          return v_PhysicObject;
     }
     else
@@ -53,7 +53,7 @@ void cSpieler::moveObject()
 {
     PhysicObject * ObjectToMove = getObjectInViewDirection();
 
-    if ( ObjectToMove )
+    if ( ObjectToMove != nullptr )
     {
         QVector3D camPos = m_cam->getPosition();
         QVector3D lookDirection = m_cam->getViewDir();
@@ -70,11 +70,11 @@ void cSpieler::scaleObject()
 {
     PhysicObject * ObjectToMove = getObjectInViewDirection();
 
-     if ( ObjectToMove )
+     if ( ObjectToMove != nullptr  )
      {
         qDebug("%f | %f", m_mouseMoveVector.x(), m_mouseMoveVector.y());
         QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
-        matrixObjekt.scale(m_mouseMoveVector.x()* 0.5f);
+        matrixObjekt.scale(m_mouseMoveVector.x());
         ObjectToMove->setEngineModelMatrix(matrixObjekt);
     }
 }
@@ -90,12 +90,6 @@ void cSpieler::keyboard(int key, int)
             moveObject();
             break;
         }
-        case 113:
-        {
-            scaleObject();
-            break;
-        }
-
     }
 }
 

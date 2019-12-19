@@ -27,7 +27,7 @@ Node* cSzene::init()
     int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
     m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
 
-#define wuerfelCount 5
+    #define wuerfelCount 5
     cWuerfel *wuerfel[wuerfelCount];
     Transformation *tWuerfel[wuerfelCount];
     PhysicObject* v_PhysicObjects[wuerfelCount];
@@ -61,7 +61,7 @@ Node* cSzene::init()
         PhysicObjectConstructionInfo* v_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
         v_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f)); // Ausdehnung des Würfels in
                                                                                         // halber länge angeben
-        v_PhysicObjectConstructionInfo->setCcdActivation(true); // durchdringen durch andere Objekte Abfangen, benötigt
+        v_PhysicObjectConstructionInfo->setCcdActivation(false); // durchdringen durch andere Objekte Abfangen, benötigt
                                                                 // mehr Rechenzeit
         v_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxHalfExtends); // Form des Hüllkörpers
                                                                                          // festlegen
@@ -69,7 +69,7 @@ Node* cSzene::init()
                                                            // maximal
         v_PhysicObjectConstructionInfo->setLocalInertiaPoint(QVector3D(0.f, 0.f, 0.f)); // Schwerpunkt des Objektes
                                                                                         // angeben, Standardwert (0,0,0)
-        v_PhysicObjectConstructionInfo->setMass(2.f); // Gewicht des Körpers bestimmen, sollte nicht zu groß gewählt
+        v_PhysicObjectConstructionInfo->setMass(10.f); // Gewicht des Körpers bestimmen, sollte nicht zu groß gewählt
                                                       // werden
         v_PhysicObjectConstructionInfo->setMidpointTransformation(QMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)); // Mittelpunkttransformation angeben falls
         // Geometrie in seinem Koordinatensystem

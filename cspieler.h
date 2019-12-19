@@ -25,6 +25,7 @@ private:
     PhysicObject * getObjectInViewDirection();
     void moveObject();
     void scaleObject();
+    PhysicObject* v_PhysicObject;
 protected:
     virtual void controlCamera() override;
 

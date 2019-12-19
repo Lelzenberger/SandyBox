@@ -6,11 +6,11 @@
 
 Node* initScene1();
 Camera * cam;
-
+cSpieler * Spieler;
 void SceneManager::initScenes()
 {
     cam = new Camera();
-    cSpieler * Spieler = new cSpieler(cam);
+    Spieler = new cSpieler(cam);
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
@@ -26,10 +26,10 @@ Node* initScene1()
 {
 
 
-    cSpieler* Spieler = new cSpieler();
-    Spieler->setCamera(cam);
     cSzene *sz = new cSzene();
     Node *root = new Node();
     root = sz->init();
+    Spieler->setCamera(cam);
+    Spieler->setPhysicEngine(sz->getPhysicEngine());
     return (root);
 }
