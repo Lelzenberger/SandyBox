@@ -10,13 +10,19 @@ class cSpieler : public CameraController, public Listener
 public:
     cSpieler(Camera * camera);
     virtual ~cSpieler();
+
+    void setPhysicEngine(PhysicEngine * PhysicEngine);
     Camera * getCamera();
 
 private:
-    Camera * cam;
-    bool mRightMouseButtonPressed, mFollowMouse = false;
-    const float mHeight = 1.0f;
+    Camera * m_cam;
+    PhysicEngine * m_PhysicEngine;
+    bool m_RightMouseButtonPressed, m_FollowMouse = false;
+    const float m_Height = 1.0f;
+
     void keyboard(int, int) override;
+    void getObjectInViewDirection(QVector3D lookDirection);
+
 protected:
     virtual void controlCamera() override;
 

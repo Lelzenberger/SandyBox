@@ -5,15 +5,43 @@
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {
-    mFollowMouse = true;
-    mRightMouseButtonPressed = true;
-    cam = camera;
-    cam->lockZRotation();
+    m_PhysicEngine = nullptr;
+    m_FollowMouse = true;
+    m_RightMouseButtonPressed = true;
+    m_cam = camera;
+    m_cam->lockZRotation();
+    CameraController::setMoveSpeed(0.5f * 0.1f);
 }
 
 cSpieler::~cSpieler()
 {
 
+}
+
+
+void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
+{
+    m_PhysicEngine = PhysicEngine;
+}
+
+
+void cSpieler::getObjectInViewDirection(QVector3D lookDirection)
+{
+    if ( m_PhysicEngine )
+    {
+         QVector3D camPos = m_cam->getPosition();
+         PhysicObject* v_PhysicObject = m_PhysicEngine->rayTestClosestBody(camPos, camPos + 100 * lookDirection);
+
+         if (v_PhysicObject != 0)
+         {
+              QMatrix4x4 v_Matrix = v_PhysicObject->getEngineModelMatrix();
+              v_Matrix.setColumn(3, (camPos + 10 * lookDirection).toVector4D());
+              v_PhysicObject->setEngineModelMatrix(v_Matrix);
+              v_PhysicObject->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
+         }
+    }
+    else
+        qDebug("NO PHYSIC ENGINE SET!!");
 }
 
 
@@ -23,16 +51,18 @@ void cSpieler::keyboard(int key, int)
     {
         case 101:
         {
-
+            getObjectInViewDirection(m_cam->getViewDir());
             break;
         }
 
     }
 }
+
+
 void cSpieler::controlCamera()
 {
 
-    //---- KEYBOARD STEUERUNG
+//---- KEYBOARD STEUERUNG
     QVector3D deltaPosition;
 
     KeyboardInput* keyIn = InputRegistry::getInstance().getKeyboardInput();
@@ -53,43 +83,41 @@ void cSpieler::controlCamera()
         deltaPosition += mCamera->getRightDir() * mMoveSpeed;
     }
 
-    //----- MAUS STEUERUNG
+//----- MAUS STEUERUNG
     const QVector2D mouseMoveVector = InputRegistry::getInstance().getMouseInput()->getMouseMove();
-//    const QPoint mouseMoveVector2 = InputRegistry::getInstance().getMouseInput()->getMousePosition();
-//    qDebug("%i | %i", mouseMoveVector2.x(), mouseMoveVector2.y());
 
     if (!OpenGLWidget::getInstance()->geometry().contains(OpenGLWidget::getInstance()->mapFromGlobal(QCursor::pos())))
     {
 
-        mFollowMouse = false;
+        m_FollowMouse = false;
         OpenGLWidget::getInstance()->setCursor(Qt::ArrowCursor);
         return;
     }
 
     if (InputRegistry::getInstance().getMouseInput()->isMouseButtonPressed(Qt::RightButton))
     {
-        if (!mRightMouseButtonPressed)
+        if (!m_RightMouseButtonPressed)
         {
 
-            mRightMouseButtonPressed = true;
-            mFollowMouse = !mFollowMouse;
+            m_RightMouseButtonPressed = true;
+            m_FollowMouse = !m_FollowMouse;
         }
     }
     else
     {
-        mRightMouseButtonPressed = false;
+        m_RightMouseButtonPressed = false;
     }
 
-    if (mFollowMouse || SceneManager::instance()->isInFullScreenMode())
+    if (m_FollowMouse || SceneManager::instance()->isInFullScreenMode())
     {
         if (SceneManager::instance()->isInFullScreenMode())
         {
 
-            mFollowMouse = false;
+            m_FollowMouse = false;
         }
 
         OpenGLWidget& window = *OpenGLWidget::getInstance();
-        window.setCursor(Qt::BlankCursor); // Mauszeiger ausblenden
+        window.setCursor(Qt::BlankCursor);
         QRect geometry = window.geometry();
         if (mouseMoveVector.lengthSquared() < geometry.height() * geometry.bottom() / 10.0f)
         {
@@ -111,13 +139,11 @@ void cSpieler::controlCamera()
         OpenGLWidget::getInstance()->setCursor(Qt::ArrowCursor);
     }
 
-//     cam->setPosition(cam->getPosition() + deltaPosition * QVector3D(1,0,1));
-
-     cam->setPosition(cam->getPosition().x() + deltaPosition.x(), mHeight,cam->getPosition().z() + deltaPosition.z() );
-     cam->setRotation(mYaw, mPitch, mRoll);
+     m_cam->setPosition(m_cam->getPosition().x() + deltaPosition.x(), m_Height,m_cam->getPosition().z() + deltaPosition.z() );
+     m_cam->setRotation(mYaw, mPitch, mRoll);
 }
 
 Camera *cSpieler::getCamera()
 {
-    return cam;
+    return m_cam;
 }
