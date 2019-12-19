@@ -5,11 +5,13 @@
 #include "cszene.h"
 
 Node* initScene1();
-Camera * cam;
+//Camera * cam;
 
 void SceneManager::initScenes()
 {
-    cam = new Camera();
+    Camera* cam = new Camera();
+    CameraController* camController = new MouseKeyboardCameraController(cam);
+    Q_UNUSED(camController)
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
@@ -23,8 +25,8 @@ void SceneManager::initScenes()
 Node* initScene1()
 {
 
-    cSpieler* Spieler = new cSpieler();
-    Spieler->setCamera(cam);
+    //cSpieler* Spieler = new cSpieler();
+    //Spieler->setCamera(cam);
     cSzene *sz = new cSzene();
     Node *root = new Node();
     root = sz->init();

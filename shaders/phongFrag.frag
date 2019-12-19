@@ -60,10 +60,10 @@ in vec3 color;
 
 void main()
 {
-    vec3 view = normalize(-fragPos);
+    vec3 view = normalize(fragPos);
     vec3 light = normalize(-sunLights[0].viewDirection);
     vec3 norm = normalize(normal);
-    vec3 reflection = reflect(-light, norm);
+    vec3 reflection = reflect(light, norm);
 
     vec3 ambient =  vec3(material.ambient) * sunLights[0].ambient;
     vec3 diffuse = max(dot(norm, light), 0.0f) * vec3(material.diffuse) * sunLights[0].diffuse;
