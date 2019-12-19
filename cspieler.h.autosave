@@ -22,8 +22,8 @@ private:
     QVector2D m_mouseMoveVector;
 
     void keyboard(int, int) override;
-    PhysicObject getObjectInViewDirection(QVector3D lookDirection);
-    void moveObjekt(PhysicObject *ObjectToMove, QVector3D camPos, QVector3D lookDirection);
+    PhysicObject * getObjectInViewDirection();
+    void moveObjekt();
 protected:
     virtual void controlCamera() override;
 

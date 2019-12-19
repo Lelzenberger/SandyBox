@@ -25,33 +25,51 @@ void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
 }
 
 
-void cSpieler::getObjectInViewDirection(QVector3D lookDirection)
+PhysicObject* cSpieler::getObjectInViewDirection()
 {
     if ( m_PhysicEngine )
     {
          QVector3D camPos = m_cam->getPosition();
+         QVector3D lookDirection = m_cam->getViewDir();
          PhysicObject* v_PhysicObject = m_PhysicEngine->rayTestClosestBody(camPos, camPos + 100 * lookDirection);
-
-         if (v_PhysicObject != 0)
-         {
-              QMatrix4x4 v_Matrix = v_PhysicObject->getEngineModelMatrix();
-              v_Matrix.setColumn(3, (camPos + 10 * lookDirection).toVector4D());
-              v_PhysicObject->setEngineModelMatrix(v_Matrix);
-              v_PhysicObject->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
-         }
+         return v_PhysicObject;
     }
     else
         qDebug("NO PHYSIC ENGINE SET!!");
+    return nullptr;
 }
 
+void cSpieler::moveObjekt()
+{
+    PhysicObject * ObjectToMove = getObjectInViewDirection();
+
+    if (ObjectToMove != 0)
+    {
+        QVector3D camPos = m_cam->getPosition();
+        QVector3D lookDirection = m_cam->getViewDir();
+
+        QMatrix4x4 v_Matrix = ObjectToMove->getEngineModelMatrix();
+        v_Matrix.setColumn(3, (camPos + 10 * lookDirection).toVector4D());
+        ObjectToMove->setEngineModelMatrix(v_Matrix);
+        ObjectToMove->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
+    }
+
+}
 
 void cSpieler::keyboard(int key, int)
 {
+//    qDebug("%i",key);
     switch(key)
     {
         case 101:
         {
-            getObjectInViewDirection(m_cam->getViewDir());
+            moveObjekt();
+            break;
+        }
+        case 103:
+        {
+
+
             break;
         }
 
@@ -84,7 +102,7 @@ void cSpieler::controlCamera()
     }
 
 //----- MAUS STEUERUNG
-    const QVector2D mouseMoveVector = InputRegistry::getInstance().getMouseInput()->getMouseMove();
+    m_mouseMoveVector = InputRegistry::getInstance().getMouseInput()->getMouseMove();
 
     if (!OpenGLWidget::getInstance()->geometry().contains(OpenGLWidget::getInstance()->mapFromGlobal(QCursor::pos())))
     {
@@ -119,10 +137,10 @@ void cSpieler::controlCamera()
         OpenGLWidget& window = *OpenGLWidget::getInstance();
         window.setCursor(Qt::BlankCursor);
         QRect geometry = window.geometry();
-        if (mouseMoveVector.lengthSquared() < geometry.height() * geometry.bottom() / 10.0f)
+        if (m_mouseMoveVector.lengthSquared() < geometry.height() * geometry.bottom() / 10.0f)
         {
-            mYaw += mouseMoveVector.x() * mRotSpeed;
-            mPitch -= mouseMoveVector.y() * mRotSpeed;
+            mYaw += m_mouseMoveVector.x() * mRotSpeed;
+            mPitch -= m_mouseMoveVector.y() * mRotSpeed;
             mCamera->setRotation(mYaw, mPitch, 0.f);
         }
 
@@ -140,7 +158,6 @@ void cSpieler::controlCamera()
     }
 
      m_cam->setPosition(m_cam->getPosition().x() + deltaPosition.x(), m_Height,m_cam->getPosition().z() + deltaPosition.z() );
-     m_cam->setRotation(mYaw, mPitch, mRoll);
 }
 
 Camera *cSpieler::getCamera()
