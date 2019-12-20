@@ -25,7 +25,7 @@ PhysicEngine* cSzene::getPhysicEngine()
 void cSzene::initWorld()
 {
     QString path(SRCDIR);
-    m_Texture = new Texture(path + QString("/modelstextures/gravel-4k.jpg"));
+    m_Texture = new Texture(path + QString("/modelstextures/grass.jpg"));
     m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
 
     m_world = new cWelt();
@@ -59,7 +59,7 @@ void cSzene::initSun()
 void cSzene::initSkyBox()
 {
     QString path(SRCDIR);
-    m_TextureSkyBox = new Texture(path + QString("/cubemap_miramar"));
+    m_TextureSkyBox = new Texture(path + QString("/modelstextures/skybox"));
     m_SkyBox = new cSkyBox();
     m_SkyBox->init(m_ShaderSkyBox, m_TextureSkyBox);
     m_Root->addChild(m_SkyBox->getRoot());

@@ -13,7 +13,7 @@ cWelt::cWelt()
 
  void cWelt::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm)
  {
-     m_Drawable = new Drawable(new SimplePlane(200.f));
+     m_Drawable = new Drawable(new SimplePlane(50.f));
      m_Drawable->setStaticGeometry(true);
      m_Root = new Node(m_Drawable);
      m_Material = new Material();
