@@ -23,7 +23,7 @@ cWelt::cWelt()
      m_Material->setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
      m_Material->setEmission(0.0f, 0.0f, 0.0f, 1.0f);
      m_Material->setShininess(256.0f);
-     m_Shader = s; 
+     m_Shader = s;
      m_BumpMap = bm;
      m_Texture = tex;
      m_Drawable->setProperty<BumpMap>(m_BumpMap);

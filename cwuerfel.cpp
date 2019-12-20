@@ -12,7 +12,7 @@ cWuerfel::~cWuerfel()
 }
 
 
-void cWuerfel::init(Shader* s, PhysicEngine * pe)
+void cWuerfel::init(Shader* s, PhysicEngine * pe, Texture *tex)
 {
     m_Drawable = new Drawable(new SimpleCube(1.0f));
     m_Root = new Node(m_Drawable);
@@ -24,6 +24,8 @@ void cWuerfel::init(Shader* s, PhysicEngine * pe)
     m_Material->setEmission(0.0f, 0.0f, 0.0f, 1.0f);
     m_Material->setShininess(256.0f);
     m_Shader = s;
+    m_Texture = tex;
+    m_Drawable->setProperty<Texture>(m_Texture);
     m_Drawable->setShader(m_Shader);
     m_PhysicEngine = pe;
     m_PhysicObject = m_PhysicEngine->createNewPhysicObject(m_Drawable);

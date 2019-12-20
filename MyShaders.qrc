@@ -8,5 +8,7 @@
         <file>shaders/commonlightmodels.inc</file>
         <file>shaders/textureLightedBump.frag</file>
         <file>shaders/textureLightedBump.vert</file>
+        <file>shaders/skybox.vert</file>
+        <file>shaders/texturecube.frag</file>
     </qresource>
 </RCC>

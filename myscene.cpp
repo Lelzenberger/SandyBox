@@ -19,7 +19,6 @@ void SceneManager::initScenes()
     Q_UNUSED(myRenderer)
     SceneManager::instance()->setActiveScene(myScene);
     SceneManager::instance()->setActiveContext(myContextNr);
-
 }
 
 Node* initScene1()

@@ -1,4 +1,8 @@
 layout (location = 0) out vec4 fragColor;
+uniform samplerCube textureMap;
+
+
+uniform mat3 normalMatrix;
 
 struct SunLight
 {
@@ -60,14 +64,22 @@ in vec3 color;
 
 void main()
 {
+    vec4 fragColor1;
+    vec4 fragColor2;
     vec3 view = normalize(fragPos);
     vec3 light = normalize(-sunLights[0].viewDirection);
     vec3 norm = normalize(normal);
     vec3 reflection = reflect(light, norm);
+    vec3 reflection2 = reflect(fragPos, norm);
+
+    vec4 textureFrag = texture(textureMap, normalize(vec3(reflection2.x, -reflection2.yz)));
+
+    fragColor1 = vec4(textureFrag.rgb, textureFrag.a);
 
     vec3 ambient =  vec3(material.ambient) * sunLights[0].ambient;
     vec3 diffuse = max(dot(norm, light), 0.0f) * vec3(material.diffuse) * sunLights[0].diffuse;
     vec3 specular = pow(max(dot(reflection, view), 0.0f), material.shininess) * vec3(material.specular) * sunLights[0].specular;
 
-    fragColor = vec4(ambient + diffuse + specular + vec3(material.emission), 1.0f);
+    fragColor2 = vec4(ambient + diffuse + specular + vec3(material.emission), 1.0f);
+    fragColor = fragColor1 * fragColor2;
 }

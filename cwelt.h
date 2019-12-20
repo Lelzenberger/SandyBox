@@ -5,6 +5,7 @@
 #include "physicengine.h"
 #include "texture.h"
 #include "bumpmap.h"
+#include "shader.h"
 
 class cWelt :public cObjekte
 {

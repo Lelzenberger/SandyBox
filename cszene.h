@@ -12,6 +12,7 @@
 #include "texture.h"
 #include "audiolistener.h"
 #include "soundsource.h"
+#include "cskybox.h"
 
 #define cubeCount 5
 
@@ -27,14 +28,16 @@ class cSzene
             void initWorld();
             void initSun();
             void initCubes();
+            void initSkyBox();
             cWuerfel *cube[cubeCount];
             cWelt *m_world;
             cSun *m_Sun;
+            cSkyBox *m_SkyBox;
             Node *m_Root, *m_ntCube[cubeCount], *m_ntWorld, *m_ntSun, *m_nAudio;
             PhysicEngine *m_PhysicEngine;
             int m_iPhysicEngineSlot;
-            Shader *m_Shader, *m_ShaderWorld;
-            Texture *m_Texture;
+            Shader *m_Shader, *m_ShaderWorld, *m_ShaderSkyBox;
+            Texture *m_Texture, *m_TextureSkyBox;
             BumpMap *m_BumpMap;
             Transformation *m_tCube[cubeCount], *m_tWorld, *m_tSun;
             AudioListener *m_AudioListener;

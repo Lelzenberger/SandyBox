@@ -2,6 +2,9 @@
 #include "shader.h"
 #include "shadermanager.h"
 #include "audioengine.h"
+#include "fboproperty.h"
+#include "simplecube.h"
+#include "texture.h"
 
 cSzene::cSzene()
 {
@@ -53,15 +56,24 @@ void cSzene::initSun()
     m_Root->addChild(m_ntSun);
 }
 
+void cSzene::initSkyBox()
+{
+    QString path(SRCDIR);
+    m_TextureSkyBox = new Texture(path + QString("/cubemap_miramar"));
+    m_SkyBox = new cSkyBox();
+    m_SkyBox->init(m_ShaderSkyBox, m_TextureSkyBox);
+    m_Root->addChild(m_SkyBox->getRoot());
+}
+
 void cSzene::initCubes()
 {
     for (int i = 0; i < cubeCount; i++)
     {
         cube[i] = new cWuerfel();
-        cube[i]->init(m_Shader, m_PhysicEngine);
+        cube[i]->init(m_Shader, m_PhysicEngine, m_TextureSkyBox);
 
         m_tCube[i] = new Transformation();
-        m_tCube[i]->translate(0.0f,((float)i + 0.25f) * 2.f, 0.f);
+        m_tCube[i]->translate(float(i * 4.0f), 0.25f, 0.0f);
 
         m_ntCube[i] = new Node(m_tCube[i]);
         m_ntCube[i]->addChild(cube[i]->getRoot());
@@ -78,6 +90,8 @@ Node *cSzene::init()
     m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(m_iPhysicEngineSlot);
     m_Shader = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
     m_ShaderWorld = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
+    m_ShaderSkyBox = ShaderManager::getShader<Shader>("://shaders/skybox.vert", "://shaders/texturecube.frag");
+
     m_AudioListener = new AudioListener();
     m_nAudio = new Node(m_AudioListener);
     AudioEngine::instance().init(AudioEngineType::OpenAL3D);
@@ -86,7 +100,7 @@ Node *cSzene::init()
     m_AmbientSound->play();
     m_Root->addChild(m_nAudio);
 
-
+    initSkyBox();
     initCubes();
     initSun();
     initWorld();
