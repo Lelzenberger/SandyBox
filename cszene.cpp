@@ -20,8 +20,12 @@ PhysicEngine* cSzene::getPhysicEngine()
 
 void cSzene::initWorld()
 {
+    QString path(SRCDIR);
+    m_Texture = new Texture(path + QString("/modelstextures/gravel-4k.jpg"));
+    m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
+
     m_world = new cWelt();
-    m_world->init(m_Shader, m_PhysicEngine);
+    m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
 
     m_tWorld = new Transformation();
     m_tWorld->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
@@ -71,6 +75,7 @@ Node *cSzene::init()
     m_iPhysicEngineSlot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
     m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(m_iPhysicEngineSlot);
     m_Shader = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
+    m_ShaderWorld = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
 
     initCubes();
     initSun();

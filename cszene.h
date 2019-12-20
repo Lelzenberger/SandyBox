@@ -8,6 +8,8 @@
 #include "cwuerfel.h"
 #include "cwelt.h"
 #include "csun.h"
+#include "bumpmap.h"
+#include "texture.h"
 
 #define cubeCount 5
 
@@ -29,7 +31,9 @@ class cSzene
             Node *m_Root, *m_ntCube[cubeCount], *m_ntWorld, *m_ntSun;
             PhysicEngine *m_PhysicEngine;
             int m_iPhysicEngineSlot;
-            Shader *m_Shader;
+            Shader *m_Shader, *m_ShaderWorld;
+            Texture *m_Texture;
+            BumpMap *m_BumpMap;
             Transformation *m_tCube[cubeCount], *m_tWorld, *m_tSun;
 };
 

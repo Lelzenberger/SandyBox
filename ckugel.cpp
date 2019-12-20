@@ -9,7 +9,6 @@ cKugel::cKugel()
 
 void cKugel::init(Shader* s, PhysicEngine *pe)
 {
-    QString path(SRCDIR);
     m_Drawable = new Drawable(new SimpleSphere(1.0f, 10, 10));
     m_Root = new Node(m_Drawable);
     m_Material = new Material();

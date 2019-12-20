@@ -11,7 +11,7 @@ cWelt::cWelt()
 
  }
 
- void cWelt::init(Shader *s, PhysicEngine *pe)
+ void cWelt::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm)
  {
      m_Drawable = new Drawable(new SimplePlane(200.f));
      m_Drawable->setStaticGeometry(true);
@@ -23,7 +23,11 @@ cWelt::cWelt()
      m_Material->setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
      m_Material->setEmission(0.0f, 0.0f, 0.0f, 1.0f);
      m_Material->setShininess(256.0f);
-     m_Shader = s;
+     m_Shader = s; 
+     m_BumpMap = bm;
+     m_Texture = tex;
+     m_Drawable->setProperty<BumpMap>(m_BumpMap);
+     m_Drawable->setProperty<Texture>(m_Texture);
      m_Drawable->setShader(m_Shader);
      m_PhysicEngine = pe;
      m_PhysicObject = m_PhysicEngine->createNewPhysicObject(m_Drawable);
