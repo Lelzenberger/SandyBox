@@ -2,19 +2,35 @@
 #define CSPIELER_H
 
 #include "camera.h"
-#include "listener.h"
+#include "cameracontroller.h"
+#include "keyboardinput.h"
 
-class cSpieler : public Listener
+class cSpieler : public CameraController
 {
 public:
-    cSpieler();
+    cSpieler(Camera * camera);
     virtual ~cSpieler();
+
+    void setPhysicEngine(PhysicEngine * PhysicEngine);
     Camera * getCamera();
-    void setCamera(Camera * cam);
-    virtual void keyboard(int key, int modifier);
 
 private:
-    Camera * cam;
+    Camera * m_cam;
+    PhysicEngine * m_PhysicEngine;
+    bool m_RightMouseButtonPressed, m_FollowMouse = false;
+    const float m_Height = 1.0f;
+    QVector2D m_mouseMoveVector;
+
+    void isPressed();
+    PhysicObject * getObjectInViewDirection();
+    void moveObject();
+    void scaleObject();
+    PhysicObject* v_PhysicObject;
+    PhysicObject * ObjectToMove;
+    KeyboardInput* keyIn;
+
+protected:
+    virtual void controlCamera() override;
 
 };
 
