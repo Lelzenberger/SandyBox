@@ -1,14 +1,17 @@
 #include "cszene.h"
-#include "sunlight.h"
-#include "cwuerfel.h"
-#include "cwelt.h"
-#include "transformation.h"
-#include "spotlight.h"
 #include "shader.h"
 #include "shadermanager.h"
-#include "ckugel.h"
+#include "audioengine.h"
+#include "fboproperty.h"
+#include "simplecube.h"
+#include "texture.h"
 
 cSzene::cSzene()
+{
+
+}
+
+cSzene::~cSzene()
 {
 
 }
@@ -18,119 +21,90 @@ PhysicEngine* cSzene::getPhysicEngine()
     return m_PhysicEngine;
 }
 
-Node* cSzene::init()
+
+void cSzene::initWorld()
 {
-    root = new Node(new Transformation);
-
     QString path(SRCDIR);
+    m_Texture = new Texture(path + QString("/modelstextures/grass.jpg"));
+    m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
 
-    int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
-    m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
+    m_world = new cWelt();
+    m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
 
-    #define wuerfelCount 5
-    cWuerfel *wuerfel[wuerfelCount];
-    Transformation *tWuerfel[wuerfelCount];
-    PhysicObject* v_PhysicObjects[wuerfelCount];
-    Node* nWuerfel[wuerfelCount];
+    m_tWorld = new Transformation();
+    m_tWorld->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
 
-    Shader *s = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
+    m_ntWorld = new Node(m_tWorld);
+    m_ntWorld->addChild(m_world->getRoot());
 
-    for (int i = 0; i < wuerfelCount; i++)
+    m_Root->addChild(m_ntWorld);
+}
+
+void cSzene::initSun()
+{
+    m_Sun = new cSun();
+    m_Sun->init(m_Shader);
+
+    m_tSun = new Transformation();
+    m_tSun->translate(-100.0f, 50.0f, 100.0f);
+    m_tSun->rotate(-20.0f, 1.0f, 0.0f, 1.0f);
+    m_tSun->rotate(-45.0f, 0.0f, 1.0f, 0.0f);
+    m_ntSun = new Node(m_tSun);
+    m_ntSun->addChild(m_Sun->getRoot());
+
+
+    m_Root->addChild(m_ntSun);
+}
+
+void cSzene::initSkyBox()
+{
+    QString path(SRCDIR);
+    m_TextureSkyBox = new Texture(path + QString("/modelstextures/skybox"));
+    m_SkyBox = new cSkyBox();
+    m_SkyBox->init(m_ShaderSkyBox, m_TextureSkyBox);
+    m_Root->addChild(m_SkyBox->getRoot());
+}
+
+void cSzene::initCubes()
+{
+    for (int i = 0; i < cubeCount; i++)
     {
-        tWuerfel[i] = new Transformation();
-        tWuerfel[i]->translate(0.0f,((float)i + 0.25f) * 2.f, 0.f);
-        Node* tnWuerfel = new Node(tWuerfel[i]);
-        root->addChild(tnWuerfel);
-
-        wuerfel[i] = new cWuerfel();
-        wuerfel[i]->init(1.0f, s);
-        nWuerfel[i] = new Node(wuerfel[i]->getRoot());
-        tnWuerfel->addChild(nWuerfel[i]);
-
-        wuerfel[i]->setMaterialAmbient(0.4f, 0.0f, 0.0f, 1.0f);
-        wuerfel[i]->setMaterialDiffuse(0.8f, 0.0f, 0.0f, 1.0f);
-        wuerfel[i]->setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
-        wuerfel[i]->setMaterialEmission(0.0f, 0.0f, 0.0f, 1.0f);
-        wuerfel[i]->setMaterialShininess(256.0f);
+        cube[i] = new cWuerfel();
+        cube[i]->init(m_Shader, m_PhysicEngine, m_TextureSkyBox);
 
 
+        m_tCube[i] = new Transformation();
+        m_tCube[i]->translate(float(i * 4.0f), 0.25f, 0.0f);
 
+        m_ntCube[i] = new Node(m_tCube[i]);
+        m_ntCube[i]->addChild(cube[i]->getRoot());
 
-
-        v_PhysicObjects[i] = m_PhysicEngine->createNewPhysicObject(wuerfel[i]->returnDrawable());
-        PhysicObjectConstructionInfo* v_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
-        v_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f)); // Ausdehnung des Würfels in
-                                                                                        // halber länge angeben
-        v_PhysicObjectConstructionInfo->setCcdActivation(false); // durchdringen durch andere Objekte Abfangen, benötigt
-                                                                // mehr Rechenzeit
-        v_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxHalfExtends); // Form des Hüllkörpers
-                                                                                         // festlegen
-        v_PhysicObjectConstructionInfo->setFriction(0.5f); // Reibung zwischen 0 und 1 angeben, 0 keine reibung 1
-                                                           // maximal
-        v_PhysicObjectConstructionInfo->setLocalInertiaPoint(QVector3D(0.f, 0.f, 0.f)); // Schwerpunkt des Objektes
-                                                                                        // angeben, Standardwert (0,0,0)
-        v_PhysicObjectConstructionInfo->setMass(10.f); // Gewicht des Körpers bestimmen, sollte nicht zu groß gewählt
-                                                      // werden
-        v_PhysicObjectConstructionInfo->setMidpointTransformation(QMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)); // Mittelpunkttransformation angeben falls
-        // Geometrie in seinem Koordinatensystem
-        // verschoben liegt
-        v_PhysicObjectConstructionInfo->setRestitution(0.1f);     // Elastizität des Körpers bestimmen, von 0 bis 1
-                                                                  // definiert
-        v_PhysicObjectConstructionInfo->setRollingFriction(0.1f);
-        v_PhysicObjects[i]->setConstructionInfo(v_PhysicObjectConstructionInfo);
-        v_PhysicObjects[i]->registerPhysicObject();
+        m_Root->addChild(m_ntCube[i]);
     }
+}
 
-    cKugel *sonne = new cKugel();
-    sonne->init(1.0f, 25, 25, s);
-    sonne->setMaterialAmbient(0.0f, 0.0f, 0.0f, 1.0f);
-    sonne->setMaterialDiffuse(0.0f, 0.0f, 0.0f, 1.0f);
-    sonne->setMaterialSpecular(0.0f, 0.0f, 0.0f, 1.0f);
-    sonne->setMaterialEmission(1.0f, 1.0f, 1.0f, 1.0f);
-    sonne->setMaterialShininess(0.0f);
+Node *cSzene::init()
+{
+    QString path(SRCDIR);
+    m_Root = new Node();
+    m_iPhysicEngineSlot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
+    m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(m_iPhysicEngineSlot);
+    m_Shader = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
+    m_ShaderWorld = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
+    m_ShaderSkyBox = ShaderManager::getShader<Shader>("://shaders/skybox.vert", "://shaders/texturecube.frag");
 
-    cWelt *welt = new cWelt();
-    welt->setStaticGeometry(true);
-    welt->init(200.0f, s);
-    welt->setMaterialAmbient(0.4f, 0.5f, 0.2f, 1.0f);
-    welt->setMaterialDiffuse(0.8f, 1.0f, 0.4f, 1.0f);
-    welt->setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
-    welt->setMaterialEmission(0.0f, 0.0f, 0.0f, 1.0f);
-    welt->setMaterialShininess(256.0f);
-    Transformation *tWelt = new Transformation();
-    tWelt->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
-    Node* tnWelt = new Node(tWelt);
-    Node* nWelt = new Node(welt->getRoot());
-    welt->returnDrawable()->setStaticGeometry(true);
-    PhysicObject* weltPhys = m_PhysicEngine->createNewPhysicObject(welt->returnDrawable());
-    PhysicObjectConstructionInfo* constrinfWelt = new PhysicObjectConstructionInfo();
-    constrinfWelt->setCollisionHull(CollisionHull::BoxAABB); // Automatische generierung einer Box aus den Vertexpunkten
-    weltPhys->setConstructionInfo(constrinfWelt);
-    weltPhys->registerPhysicObject();
-    tnWelt->addChild(nWelt);
+    m_AudioListener = new AudioListener();
+    m_nAudio = new Node(m_AudioListener);
+    AudioEngine::instance().init(AudioEngineType::OpenAL3D);
+    m_AmbientSound = new SoundSource(new SoundFile(path+QString("/sounds/NatureAmbiance.wav")));
+    m_AmbientSound->setLooping(true);
+    m_AmbientSound->play();
+    m_Root->addChild(m_nAudio);
 
+    initSkyBox();
+    initCubes();
+    initSun();
+    initWorld();
 
-    SunLight *sl = new SunLight();
-    Transformation *tSl = new Transformation();
-    sl->setAmbient(1.0f, 1.0f, 1.0f);
-    sl->setDiffuse(1.0f, 1.0f, 1.0f);
-    sl->setSpecular(1.0f, 1.0f, 1.0f);
-    sl->turnOn();
-    tSl->translate(-100.0f, 50.0f, 100.0f);
-    tSl->rotate(-20.0f, 1.0f, 0.0f, 1.0f);
-    tSl->rotate(-45.0f, 0.0f, 1.0f, 0.0f);
-
-
-    Node *sonneNode = new Node(sonne->getRoot());
-
-    Node *tSlNode = new Node(tSl);
-    tSlNode->addChild(sonneNode);
-
-    Node *slNode = new Node(sl);
-    tSlNode->addChild(slNode);  
-
-    root->addChild(tSlNode);
-    root->addChild(tnWelt);
-    return root;
-
+    return m_Root;
 }

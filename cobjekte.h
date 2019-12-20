@@ -11,22 +11,18 @@ class cObjekte : public Drawable
 {
 public:
     cObjekte();
-    Node getRoot();
-    Drawable getDrawable();
-    Transformation getTransformation();
-    void setMaterialAmbient(float r, float g, float b, float a);
-    void setMaterialDiffuse(float r, float g, float b, float a);
-    void setMaterialSpecular(float r, float g, float b, float a);
-    void setMaterialEmission(float r, float g, float b, float a);
-    void setMaterialShininess(float s);
+    Node *getRoot();
     void init();
     void setShader(Shader *s);
-    Drawable * returnDrawable();
+
 protected:
-    Node *m_root, *m_objektNode;
-    Material *m_material;
-    Shader *m_shader;
-    Drawable *m_drawable;
+    Node *m_Root;
+    Material *m_Material;
+    Shader *m_Shader;
+    Drawable *m_Drawable;
+    PhysicEngine *m_PhysicEngine;
+    PhysicObject *m_PhysicObject;
+    PhysicObjectConstructionInfo *m_PhysicObjectConstructionInfo;
 };
 
 #endif // COBJEKTE_H
