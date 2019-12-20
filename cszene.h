@@ -10,6 +10,8 @@
 #include "csun.h"
 #include "bumpmap.h"
 #include "texture.h"
+#include "audiolistener.h"
+#include "soundsource.h"
 
 #define cubeCount 5
 
@@ -28,13 +30,15 @@ class cSzene
             cWuerfel *cube[cubeCount];
             cWelt *m_world;
             cSun *m_Sun;
-            Node *m_Root, *m_ntCube[cubeCount], *m_ntWorld, *m_ntSun;
+            Node *m_Root, *m_ntCube[cubeCount], *m_ntWorld, *m_ntSun, *m_nAudio;
             PhysicEngine *m_PhysicEngine;
             int m_iPhysicEngineSlot;
             Shader *m_Shader, *m_ShaderWorld;
             Texture *m_Texture;
             BumpMap *m_BumpMap;
             Transformation *m_tCube[cubeCount], *m_tWorld, *m_tSun;
+            AudioListener *m_AudioListener;
+            SoundSource *m_AmbientSound;
 };
 
 #endif // CSZENE_H

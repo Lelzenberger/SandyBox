@@ -1,6 +1,7 @@
 #include "cszene.h"
 #include "shader.h"
 #include "shadermanager.h"
+#include "audioengine.h"
 
 cSzene::cSzene()
 {
@@ -71,11 +72,20 @@ void cSzene::initCubes()
 
 Node *cSzene::init()
 {
+    QString path(SRCDIR);
     m_Root = new Node();
     m_iPhysicEngineSlot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
     m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(m_iPhysicEngineSlot);
     m_Shader = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
     m_ShaderWorld = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
+    m_AudioListener = new AudioListener();
+    m_nAudio = new Node(m_AudioListener);
+    AudioEngine::instance().init(AudioEngineType::OpenAL3D);
+    m_AmbientSound = new SoundSource(new SoundFile(path+QString("/sounds/NatureAmbiance.wav")));
+    m_AmbientSound->setLooping(true);
+    m_AmbientSound->play();
+    m_Root->addChild(m_nAudio);
+
 
     initCubes();
     initSun();
