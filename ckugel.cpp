@@ -33,4 +33,5 @@ void cKugel::init(Shader* s, PhysicEngine *pe)
 
 cKugel::~cKugel()
 {
+	test
 }
