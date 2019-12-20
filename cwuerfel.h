@@ -5,11 +5,10 @@
 
 class cWuerfel : public cObjekte
 {
-public:
-    cWuerfel();
-    ~cWuerfel();
-    void init(float fSize, Shader* s);
-
+    public:
+            cWuerfel();
+            ~cWuerfel();
+            void init(Shader* s, PhysicEngine *pe);
 };
 
 #endif // CWUERFEL_H

@@ -2,13 +2,14 @@
 #define CKUGEL_H
 
 #include "cobjekte.h"
+#include "physicengine.h"
 
 class cKugel : public cObjekte
 {
 public:
     cKugel();
     ~cKugel();
-    void init(float fSize, int subX, int subY, Shader* s);
+    void init(Shader* s, PhysicEngine *pe);
 };
 
 #endif // CKUGEL_H
