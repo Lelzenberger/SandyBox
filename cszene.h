@@ -23,7 +23,7 @@ class cSzene
             ~cSzene();
             Node *init();
             PhysicEngine *getPhysicEngine();
-
+            SoundSource * getSoundSource();
     private:
             void initWorld();
             void initSun();

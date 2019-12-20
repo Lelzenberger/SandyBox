@@ -21,7 +21,6 @@ PhysicEngine* cSzene::getPhysicEngine()
     return m_PhysicEngine;
 }
 
-
 void cSzene::initWorld()
 {
     QString path(SRCDIR);
