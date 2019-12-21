@@ -73,35 +73,30 @@ void cSpieler::moveObject()
 
                     case 0:
 
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup1.wav")));
-                        file->play();
+                        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup1.wav")));
+                        m_sPickup->play();
                         break;
 
                     case 1:
 
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup2.wav")));
-                        file->play();
+                        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup2.wav")));
+                        m_sPickup->play();
                         break;
 
                     case 2:
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup3.wav")));
-                        file->play();
+                        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup3.wav")));
+                        m_sPickup->play();
                         break;
                     case 3:
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup4.wav")));
-                        file->play();
+                        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup4.wav")));
+                        m_sPickup->play();
                         break;
                  }
             }
         }
         else
         {
-            if ( timerForSounds.elapsed() > 400 )
-            {
-                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickupfail.wav")));
-                file->play();
-                timerForSounds.restart();
-            }
+            playItemPickUpFailSound();
         }
 }
 
@@ -131,14 +126,48 @@ void cSpieler::scaleObject()
     }
 }
 
+void cSpieler::playFootStepSound()
+{
+    if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+    {
+        m_sFootstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+        m_sFootstep->play();
+        timerForSounds.restart();
+    }
+}
+
+void cSpieler::playItemDropSound()
+{
+    if ( timerForItemDrop.elapsed() >  300 && m_bPickedUp)
+    {
+        m_sDrop = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/ObjectRelease.wav")));
+        m_sDrop->play();
+        timerForItemDrop.restart();
+    }
+}
+
+void cSpieler::playItemPickUpFailSound()
+{
+    if ( timerForSounds.elapsed() > 400 )
+    {
+        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickupfail.wav")));
+        m_sPickup->play();
+        timerForSounds.restart();
+    }
+}
+
 
 void cSpieler::isPressed()
 {
     if (keyIn->isKeyPressed('e'))
     {
         moveObject();
-    } else
+    }
+    else
+    {
+        playItemDropSound();
         m_bPickedUp = false;
+    }
     if (keyIn->isKeyPressed('q'))
     {
         scaleObject();
@@ -156,42 +185,22 @@ void cSpieler::controlCamera()
     keyIn = InputRegistry::getInstance().getKeyboardInput();
     if (keyIn->isKeyPressed('w'))
     {
-        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
-        {
-            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
-            footstep->play();
-            timerForSounds.restart();
-        }
+        playFootStepSound();
         deltaPosition += mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('s'))
     {
-        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
-        {
-            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
-            footstep->play();
-            timerForSounds.restart();
-        }
+        playFootStepSound();
         deltaPosition -= mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('a'))
     {
-        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
-        {
-            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
-            footstep->play();
-            timerForSounds.restart();
-        }
+        playFootStepSound();
         deltaPosition -= mCamera->getRightDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('d'))
     {
-        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
-        {
-            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
-            footstep->play();
-            timerForSounds.restart();
-        }
+        playFootStepSound();
         deltaPosition += mCamera->getRightDir() * mMoveSpeed;
     }
 
