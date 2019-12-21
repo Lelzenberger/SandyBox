@@ -23,6 +23,7 @@ private:
     void scaleObject();
 
     SoundSource * file;
+    SoundSource * footstep;
     Camera * m_cam;
     PhysicEngine * m_PhysicEngine;
     bool m_RightMouseButtonPressed, m_FollowMouse = false;
@@ -33,6 +34,7 @@ private:
     PhysicObject * ObjectToMove;
     KeyboardInput* keyIn;
     QElapsedTimer timerForScale;
+    QElapsedTimer timerForSounds;
     PhysicObject * m_PhysicObject;
 protected:
     virtual void controlCamera() override;

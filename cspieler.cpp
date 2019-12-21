@@ -94,6 +94,15 @@ void cSpieler::moveObject()
                  }
             }
         }
+        else
+        {
+            if ( timerForSounds.elapsed() > 400 )
+            {
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickupfail.wav")));
+                file->play();
+                timerForSounds.restart();
+            }
+        }
 }
 
 
@@ -147,18 +156,42 @@ void cSpieler::controlCamera()
     keyIn = InputRegistry::getInstance().getKeyboardInput();
     if (keyIn->isKeyPressed('w'))
     {
+        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+        {
+            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+            footstep->play();
+            timerForSounds.restart();
+        }
         deltaPosition += mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('s'))
     {
+        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+        {
+            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+            footstep->play();
+            timerForSounds.restart();
+        }
         deltaPosition -= mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('a'))
     {
+        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+        {
+            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+            footstep->play();
+            timerForSounds.restart();
+        }
         deltaPosition -= mCamera->getRightDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('d'))
     {
+        if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+        {
+            footstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+            footstep->play();
+            timerForSounds.restart();
+        }
         deltaPosition += mCamera->getRightDir() * mMoveSpeed;
     }
 
