@@ -21,7 +21,6 @@ PhysicEngine* cSzene::getPhysicEngine()
     return m_PhysicEngine;
 }
 
-
 void cSzene::initWorld()
 {
     QString path(SRCDIR);
@@ -106,5 +105,13 @@ Node *cSzene::init()
     initSun();
     initWorld();
 
+    // ALGORYTHMUS ZUM BÄUME VERTEILEN HIER REIN!!
+    test = new cTree();
+    test->init(1);
+    test->registerAtPhysicEngine(m_PhysicEngine);
+    // ------
+    m_Root->addChild(test->getRoot());
+
+    qDebug("return node");
     return m_Root;
 }

@@ -10,7 +10,9 @@ class cWuerfel : public cObjekte
             cWuerfel();
             ~cWuerfel();
             void init(Shader* s, PhysicEngine *pe, Texture *tex);
+            PhysicObjectConstructionInfo* returnConstructionInfo();
     private:
+            PhysicObjectConstructionInfo* m_PhysicObjectConstructionInfo;
             Texture *m_Texture;
 };
 

@@ -31,7 +31,7 @@ void cWuerfel::init(Shader* s, PhysicEngine * pe, Texture *tex)
     m_PhysicObject = m_PhysicEngine->createNewPhysicObject(m_Drawable);
     m_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
     m_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f));
-    m_PhysicObjectConstructionInfo->setCcdActivation(false);
+    m_PhysicObjectConstructionInfo->setCcdActivation(true);
     m_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxHalfExtends);
     m_PhysicObjectConstructionInfo->setFriction(0.5f);
     m_PhysicObjectConstructionInfo->setLocalInertiaPoint(QVector3D(0.f, 0.f, 0.f));

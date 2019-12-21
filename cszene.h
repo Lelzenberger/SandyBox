@@ -23,7 +23,7 @@ class cSzene
             ~cSzene();
             Node *init();
             PhysicEngine *getPhysicEngine();
-
+            SoundSource * getSoundSource();
     private:
             void initWorld();
             void initSun();
@@ -42,6 +42,7 @@ class cSzene
             Transformation *m_tCube[cubeCount], *m_tWorld, *m_tSun;
             AudioListener *m_AudioListener;
             SoundSource *m_AmbientSound;
+            cTree *test;
 };
 
 #endif // CSZENE_H

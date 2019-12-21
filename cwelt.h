@@ -6,7 +6,7 @@
 #include "texture.h"
 #include "bumpmap.h"
 #include "shader.h"
-
+#include "ctree.h"
 class cWelt :public cObjekte
 {
 public:
