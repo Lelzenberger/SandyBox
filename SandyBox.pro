@@ -9,6 +9,7 @@ SOURCES += \
     cspieler.cpp \
     csun.cpp \
     cszene.cpp \
+    ctree.cpp \
     cwelt.cpp \
     cwuerfel.cpp \
     myscene.cpp \
@@ -20,6 +21,7 @@ HEADERS += \
     cspieler.h \
     csun.h \
     cszene.h \
+    ctree.h \
     cwelt.h \
     cwuerfel.h
 
