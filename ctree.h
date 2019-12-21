@@ -6,6 +6,7 @@
 #include "transformation.h"
 #include "cobjekte.h"
 #include "physicengine.h"
+#include "trianglemesh.h"
 
 class cTree: public cObjekte
 {
@@ -16,6 +17,8 @@ public:
     void registerAtPhysicEngine(PhysicEngine * PhysEngine);
 
 private:
+   static TriangleMesh * m_tmKrone;
+   static TriangleMesh * m_tmStamm;
    float m_fScale;
    Drawable * m_dKrone;
    Drawable * m_dStamm;

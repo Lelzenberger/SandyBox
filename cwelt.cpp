@@ -2,7 +2,7 @@
 #include "simpleplane.h"
 
 
-cWelt::cWelt()
+cWelt::cWelt(int Size) : fSize(Size)
 {
 
 }
@@ -14,7 +14,7 @@ cWelt::cWelt()
 
  void cWelt::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm)
  {
-     m_Drawable = new Drawable(new SimplePlane(50.f));
+     m_Drawable = new Drawable(new SimplePlane(fSize));
      m_Drawable->setStaticGeometry(true);
      m_Root = new Node(m_Drawable);
      m_Material = new Material();
@@ -36,4 +36,9 @@ cWelt::cWelt()
      m_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxAABB);
      m_PhysicObject->setConstructionInfo(m_PhysicObjectConstructionInfo);
      m_PhysicObject->registerPhysicObject();
+ }
+
+ int cWelt::returnSize()
+ {
+     return  fSize;
  }

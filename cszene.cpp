@@ -5,6 +5,7 @@
 #include "fboproperty.h"
 #include "simplecube.h"
 #include "texture.h"
+#include "QRandomGenerator"
 
 cSzene::cSzene()
 {
@@ -27,7 +28,7 @@ void cSzene::initWorld()
     m_Texture = new Texture(path + QString("/modelstextures/grass.jpg"));
     m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
 
-    m_world = new cWelt();
+    m_world = new cWelt(50);
     m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
 
     m_tWorld = new Transformation();
@@ -73,7 +74,7 @@ void cSzene::initCubes()
 
 
         m_tCube[i] = new Transformation();
-        m_tCube[i]->translate(float(i * 4.0f), 0.25f, 0.0f);
+        m_tCube[i]->translate(0, float(i * 1.5f), 0.0f);
 
         m_ntCube[i] = new Node(m_tCube[i]);
         m_ntCube[i]->addChild(cube[i]->getRoot());
@@ -82,6 +83,40 @@ void cSzene::initCubes()
     }
 }
 
+void cSzene::initTrees()
+{
+    QRandomGenerator temp;
+    int worldSize = m_world->returnSize()/2;
+    for (int i = 0; i < treeCount; i++)
+    {
+        long X = 0;
+        long Z = 0;
+
+        while ( X > -SPAWNRADIUS && X < SPAWNRADIUS && Z > -SPAWNRADIUS && Z < SPAWNRADIUS)
+        {
+            X = temp.bounded(-worldSize,worldSize);
+                X = temp.bounded(-worldSize,worldSize);
+            Z = temp.bounded(-worldSize,worldSize);
+                Z = temp.bounded(-worldSize,worldSize);
+
+                //doppelt damit evtl n bisschen "zeit" vergeht und er nicht dich 2 gleich variablen nimmt? kp ob das was bringt
+        }
+
+        tree[i] = new cTree();
+        tree[i]->init(temp.bounded(3,11)*0.2);                  //RandomSize
+        tree[i]->registerAtPhysicEngine(m_PhysicEngine);
+
+        m_tTree[i] = new Transformation();
+        m_tTree[i]->translate(X,0,Z);
+
+        m_ntTree[i] = new Node(m_tTree[i]);
+        m_ntTree[i]->addChild(tree[i]->getRoot());
+
+        m_Root->addChild(m_ntTree[i]);
+    }
+
+
+}
 Node *cSzene::init()
 {
     QString path(SRCDIR);
@@ -104,14 +139,7 @@ Node *cSzene::init()
     initCubes();
     initSun();
     initWorld();
+    initTrees();
 
-    // ALGORYTHMUS ZUM BÄUME VERTEILEN HIER REIN!!
-    test = new cTree();
-    test->init(1);
-    test->registerAtPhysicEngine(m_PhysicEngine);
-    // ------
-    m_Root->addChild(test->getRoot());
-
-    qDebug("return node");
     return m_Root;
 }
