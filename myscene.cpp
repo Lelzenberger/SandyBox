@@ -30,5 +30,6 @@ Node* initScene1()
     root = sz->init();
     Spieler->setCamera(cam);
     Spieler->setPhysicEngine(sz->getPhysicEngine());
+    Spieler->setRoot(root);
     return (root);
 }
