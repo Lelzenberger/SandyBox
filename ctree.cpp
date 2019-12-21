@@ -9,7 +9,7 @@ void cTree::init(float fScale)
     m_fScale = fScale*0.06f;
     m_dKrone = new Drawable(new TriangleMesh(SRCDIR+QString("/modelstextures/Krone.obj")));
     m_dKrone->setStaticGeometry(true);
-    m_dStamm = new Drawable(new TriangleMesh(SRCDIR+QString("/modelstextures/Stamm.obj")));
+    m_dStamm = new Drawable(new TriangleMesh(SRCDIR+QString("/modelstextures/Baumstamm.obj")));
     m_dStamm->setStaticGeometry(true);
     Transformation * t_Scale = new Transformation();
     Transformation * t_Krone = new Transformation();
