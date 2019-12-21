@@ -1,21 +1,21 @@
-#include "cwelt.h"
+#include "cplane.h"
 #include "simpleplane.h"
 
 
-cWelt::cWelt()
+cPlane::cPlane()
 {
 
 }
 
- cWelt::~cWelt()
+ cPlane::~cPlane()
  {
 
  }
 
- void cWelt::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm, float size)
+ void cPlane::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm, float sizeX, float sizeY, bool staticGeo)
  {
-     m_Drawable = new Drawable(new SimplePlane(size));
-     m_Drawable->setStaticGeometry(true);
+     m_Drawable = new Drawable(new SimplePlane(sizeX, sizeY));
+     m_Drawable->setStaticGeometry(staticGeo);
      m_Root = new Node(m_Drawable);
      m_Material = new Material();
      m_Material = m_Drawable->getProperty<Material>();

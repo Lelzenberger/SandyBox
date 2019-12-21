@@ -7,12 +7,14 @@
 #include "bumpmap.h"
 #include "shader.h"
 #include "ctree.h"
+#include "cplane.h"
+
 class cWelt :public cObjekte
 {
 public:
     cWelt();
     ~cWelt();
-    void init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm);
+    void init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm, float size);
 private:
     Texture *m_Texture;
     BumpMap *m_BumpMap;
