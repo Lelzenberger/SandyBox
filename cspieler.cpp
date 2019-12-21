@@ -39,9 +39,9 @@ void cSpieler::createCrosshair()
 
 
     crossHairMatrix.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
-    //ER SETZTE DIE WERTE NICH?!? BERECHNET WERDEN SIE ABER!
+//ER SETZTE DIE WERTE NICH?!? BERECHNET WERDEN SIE ABER!
     m_dCrosshair->setModelMatrix(crossHairMatrix);
-    // ----------------
+// ----------------
     if (keyIn->isKeyPressed('r'))
     {
         qDebug("OLD: %i", old.column(3));
@@ -179,12 +179,12 @@ void cSpieler::isPressed()
 void cSpieler::controlCamera()
 {
 
-
-    if (m_rootNode )
+//Crosshair aus
+    if (/*m_rootNode*/ false)
     {
          createCrosshair();
     }
-    else         qDebug("SetRoot Node in cSpieler!");
+   // else         qDebug("SetRoot Node in cSpieler!");
 
     isPressed();
 //---- KEYBOARD STEUERUNG
