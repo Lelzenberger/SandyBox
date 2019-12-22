@@ -86,18 +86,20 @@ void cSzene::initWorld(float size)
 
 void cSzene::initSun()
 {
-    m_Sun = new cSun();
-    m_Sun->init(m_Shader);
 
-    m_tSun = new Transformation();
-    m_tSun->translate(-100.0f, 50.0f, 100.0f);
-    m_tSun->rotate(-20.0f, 1.0f, 0.0f, 1.0f);
-    m_tSun->rotate(-45.0f, 0.0f, 1.0f, 0.0f);
-    m_ntSun = new Node(m_tSun);
-    m_ntSun->addChild(m_Sun->getRoot());
+    m_SunLight = new SunLight();
 
+    m_SunLight->setAmbient(1.0f, 1.0f, 1.0f);
+    m_SunLight->setDiffuse(1.0f, 1.0f, 1.0f);
+    m_SunLight->setSpecular(1.0f, 1.0f, 1.0f);
 
-    m_Root->addChild(m_ntSun);
+    m_tSunLight = new Transformation();
+    m_tSunLight->rotate(45.0f, 0.0f, 1.0f, 0.0f);
+    m_tSunLight->rotate(-80.0f, 1.0f, 0.0f, 1.0f);
+    m_ntSunLight = new Node(m_tSunLight);
+    m_ntSunLight->addChild(new Node(m_SunLight));
+    m_Root->addChild(m_ntSunLight);
+
 }
 
 void cSzene::initSkyBox()

@@ -8,7 +8,6 @@ SOURCES += \
     cplane.cpp \
     cskybox.cpp \
     cspieler.cpp \
-    csun.cpp \
     cszene.cpp \
     ctree.cpp \
     cwelt.cpp \
@@ -21,7 +20,6 @@ HEADERS += \
     cplane.h \
     cskybox.h \
     cspieler.h \
-    csun.h \
     cszene.h \
     ctree.h \
     cwelt.h \
