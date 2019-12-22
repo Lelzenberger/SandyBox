@@ -165,8 +165,9 @@ void cSpieler::isPressed()
             timerForSound.restart();
         }
         else
+    {
             m_bPickedUp = false;
-            if ( timerForSound.elapsed() > 50 && timerForSound.elapsed() < 55)
+            if ( timerForSound.elapsed() > 50 && timerForSound.elapsed() < 100)
             {
                 playPickOrDrop(true);
             }
