@@ -6,6 +6,8 @@
 #include "simplecube.h"
 #include "texture.h"
 #include "QRandomGenerator"
+#include "cplane.h"
+
 
 cSzene::cSzene()
 {
@@ -22,14 +24,16 @@ PhysicEngine* cSzene::getPhysicEngine()
     return m_PhysicEngine;
 }
 
-void cSzene::initWorld()
+void cSzene::initWorld(float size)
 {
     QString path(SRCDIR);
     m_Texture = new Texture(path + QString("/modelstextures/grass.jpg"));
     m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
 
-    m_world = new cWelt(50);
-    m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
+
+    m_world = new cWelt();
+    m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, static_cast<int>(size));
+
 
     m_tWorld = new Transformation();
     m_tWorld->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
@@ -38,6 +42,46 @@ void cSzene::initWorld()
     m_ntWorld->addChild(m_world->getRoot());
 
     m_Root->addChild(m_ntWorld);
+
+    cPlane * wand1 = new cPlane();
+    cPlane * wand2 = new cPlane();
+    cPlane * wand3 = new cPlane();
+    cPlane * wand4 = new cPlane();
+
+    wand1->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
+    wand2->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
+    wand3->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
+    wand4->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
+
+    Transformation * m_tWand1 = new Transformation();
+    Transformation * m_tWand2 = new Transformation();
+    Transformation * m_tWand3 = new Transformation();
+    Transformation * m_tWand4 = new Transformation();
+
+    m_tWand1->translate(0.0f, 0.0f, size/2.0f);
+    m_tWand2->translate(-size/2.0f, 0.0f, 0.0f);
+    m_tWand3->translate(0.0f, 0.0f, -size/2.0f);
+    m_tWand4->translate(size/2.0f, 0.0f, 0.0f);
+
+    m_tWand1->rotate(0.0f, 0.0f, 0.0f, 0.0f);
+    m_tWand2->rotate(90.0f, 0.0f, 1.0f, 0.0f);
+    m_tWand3->rotate(180.0f, 0.0f, 1.0f, 0.0f);
+    m_tWand4->rotate(270.0f, 0.0f, 1.0f, 0.0f);
+
+    Node * m_ntWand1 = new Node(m_tWand1);
+    Node * m_ntWand2 = new Node(m_tWand2);
+    Node * m_ntWand3 = new Node(m_tWand3);
+    Node * m_ntWand4 = new Node(m_tWand4);
+
+    m_ntWand1->addChild(wand1->getRoot());
+    m_ntWand2->addChild(wand2->getRoot());
+    m_ntWand3->addChild(wand3->getRoot());
+    m_ntWand4->addChild(wand4->getRoot());
+
+    m_Root->addChild(m_ntWand1);
+    m_Root->addChild(m_ntWand2);
+    m_Root->addChild(m_ntWand3);
+    m_Root->addChild(m_ntWand4);
 }
 
 void cSzene::initSun()
@@ -101,7 +145,6 @@ void cSzene::initTrees()
 
                 //doppelt damit evtl n bisschen "zeit" vergeht und er nicht dich 2 gleich variablen nimmt? kp ob das was bringt
         }
-
         tree[i] = new cTree();
         tree[i]->init(temp.bounded(3,11)*0.2, m_PhysicEngine, m_ShaderTree);                  //RandomSize
 
@@ -135,11 +178,13 @@ Node *cSzene::init()
     m_AmbientSound->play();
     m_Root->addChild(m_nAudio);
 
+
     initSkyBox();
     initCubes();
     initSun();
-    initWorld();
+    initWorld(50.0f);
     initTrees();
 
+	
     return m_Root;
 }

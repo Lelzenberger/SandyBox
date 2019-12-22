@@ -29,7 +29,7 @@ class cSzene
             PhysicEngine *getPhysicEngine();
             SoundSource * getSoundSource();
     private:
-            void initWorld();
+            void initWorld(float size);
             void initSun();
             void initCubes();
             void initSkyBox();
