@@ -5,6 +5,7 @@ TARGET = SandyBox
 SOURCES += \
     ckugel.cpp \
     cobjekte.cpp \
+    cplane.cpp \
     cskybox.cpp \
     cspieler.cpp \
     csun.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 HEADERS += \
     ckugel.h \
     cobjekte.h \
+    cplane.h \
     cskybox.h \
     cspieler.h \
     csun.h \

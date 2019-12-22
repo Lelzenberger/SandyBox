@@ -8,6 +8,7 @@
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {
+    QString path(SRCDIR);
     m_PhysicEngine = nullptr;
     m_FollowMouse = true;
     m_RightMouseButtonPressed = true;
@@ -84,7 +85,12 @@ void cSpieler::moveObject()
             {
                 m_bPickedUp = !m_bPickedUp;
                 playPickOrDrop(false);
+
             }
+        }
+        else
+        {
+            playItemPickUpFailSound();
         }
 }
 
@@ -126,6 +132,10 @@ void cSpieler::playPickOrDrop(bool DropSound)
     }
 
 }
+
+
+
+
 void cSpieler::scaleObject()
 {
 
@@ -146,7 +156,38 @@ void cSpieler::scaleObject()
             ObjectToMove->setGeometryModelMatrix(&matrixObjekt);
             ObjectToMove->addToPhysicEngine();
             //ObjectToMove->getGeometry()->setModelMatrix(matrixObjekt);
+            timerForScale.restart();
         }
+    }
+}
+
+void cSpieler::playFootStepSound()
+{
+    if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+    {
+        m_sFootstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+        m_sFootstep->play();
+        timerForSounds.restart();
+    }
+}
+
+void cSpieler::playItemDropSound()
+{
+    if ( timerForItemDrop.elapsed() >  300 && m_bPickedUp)
+    {
+        m_sDrop = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/ObjectRelease.wav")));
+        m_sDrop->play();
+        timerForItemDrop.restart();
+    }
+}
+
+void cSpieler::playItemPickUpFailSound()
+{
+    if ( timerForSounds.elapsed() > 400 )
+    {
+        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickupfail.wav")));
+        m_sPickup->play();
+        timerForSounds.restart();
     }
 }
 
@@ -156,18 +197,20 @@ void cSpieler::isPressed()
     if (keyIn->isKeyPressed('e'))
         {
             moveObject();
-            timerForSound.restart();
+            timerForScale.restart();
         }
         else
     {
             m_bPickedUp = false;
-            if ( timerForSound.elapsed() > 50 && timerForSound.elapsed() < 100)
+            if ( timerForScale.elapsed() > 50 && timerForScale.elapsed() < 100)
             {
                 playPickOrDrop(true);
             }
 
 
+
     }
+
 
     if (keyIn->isKeyPressed('q'))
         {
@@ -193,18 +236,22 @@ void cSpieler::controlCamera()
     keyIn = InputRegistry::getInstance().getKeyboardInput();
     if (keyIn->isKeyPressed('w'))
     {
+        playFootStepSound();
         deltaPosition += mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('s'))
     {
+        playFootStepSound();
         deltaPosition -= mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('a'))
     {
+        playFootStepSound();
         deltaPosition -= mCamera->getRightDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('d'))
     {
+        playFootStepSound();
         deltaPosition += mCamera->getRightDir() * mMoveSpeed;
     }
 
