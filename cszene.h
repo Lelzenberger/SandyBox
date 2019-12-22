@@ -13,8 +13,12 @@
 #include "audiolistener.h"
 #include "soundsource.h"
 #include "cskybox.h"
+#include "ctree.h"
 
-#define cubeCount 5
+#define cubeCount 15
+#define treeCount 30
+#define SPAWNRADIUS 5
+
 
 class cSzene
 {
@@ -23,25 +27,30 @@ class cSzene
             ~cSzene();
             Node *init();
             PhysicEngine *getPhysicEngine();
-
+            SoundSource * getSoundSource();
     private:
             void initWorld();
             void initSun();
             void initCubes();
             void initSkyBox();
+            void initTrees();
+
+
             cWuerfel *cube[cubeCount];
+            cTree *tree[treeCount];
             cWelt *m_world;
             cSun *m_Sun;
             cSkyBox *m_SkyBox;
-            Node *m_Root, *m_ntCube[cubeCount], *m_ntWorld, *m_ntSun, *m_nAudio;
+            Node *m_Root, *m_ntCube[cubeCount],*m_ntTree[treeCount], *m_ntWorld, *m_ntSun, *m_nAudio;
             PhysicEngine *m_PhysicEngine;
             int m_iPhysicEngineSlot;
             Shader *m_Shader, *m_ShaderWorld, *m_ShaderSkyBox;
             Texture *m_Texture, *m_TextureSkyBox;
             BumpMap *m_BumpMap;
-            Transformation *m_tCube[cubeCount], *m_tWorld, *m_tSun;
+            Transformation *m_tCube[cubeCount], *m_tTree[treeCount], *m_tWorld, *m_tSun;
             AudioListener *m_AudioListener;
             SoundSource *m_AmbientSound;
+            cTree *test;
 };
 
 #endif // CSZENE_H

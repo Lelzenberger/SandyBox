@@ -2,10 +2,12 @@
 #include "inputregistry.h"
 #include "openglwidget.h"
 #include "scenemanager.h"
+#include "simplesphere.h"
+#include "color.h"
+
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {
-
     m_PhysicEngine = nullptr;
     m_FollowMouse = true;
     m_RightMouseButtonPressed = true;
@@ -20,17 +22,32 @@ cSpieler::~cSpieler()
 
 }
 
-
-
-
-
-void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
+void cSpieler::createCrosshair()
 {
-    m_PhysicEngine = PhysicEngine;
+    if ( ! m_bCrosshairFirst )
+    {
+        m_dCrosshair = new Drawable(new SimpleSphere(1));
+        m_dCrosshair->getProperty<Color>()->setValue(1.0,0.0,0.0,1.0f);
+        m_rootNode->addChild(new Node(m_dCrosshair));
+        m_bCrosshairFirst = true;
+    }
+
+    QVector3D camPos = m_cam->getPosition();
+    QVector3D lookDirection = m_cam->getViewDir();
+    QMatrix4x4 crossHairMatrix = m_dCrosshair->getWorldMatrix();
+    QMatrix4x4 old = m_dCrosshair->getWorldMatrix();
+
+
+    crossHairMatrix.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
+//ER SETZTE DIE WERTE NICH?!? BERECHNET WERDEN SIE ABER!
+    m_dCrosshair->setModelMatrix(crossHairMatrix);
+// ----------------
+    if (keyIn->isKeyPressed('r'))
+    {
+        qDebug("OLD: %i", old.column(3));
+        qDebug("NEW: %i", crossHairMatrix.column(3));
+    }
 }
-
-
-
 
 
 PhysicObject* cSpieler::getObjectInViewDirection()
@@ -51,34 +68,85 @@ PhysicObject* cSpieler::getObjectInViewDirection()
 
 void cSpieler::moveObject()
 {
-    ObjectToMove = getObjectInViewDirection();
+        ObjectToMove = getObjectInViewDirection();
 
-    if ( ObjectToMove != nullptr )
+        if ( ObjectToMove != nullptr && ObjectToMove->getPhysicState() == PhysicState::Dynamic)
+        {
+            QVector3D camPos = m_cam->getPosition();
+            QVector3D lookDirection = m_cam->getViewDir();
+
+            QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
+            matrixObjekt.setColumn(3, (camPos + 4 * lookDirection).toVector4D());
+            ObjectToMove->setEngineModelMatrix(matrixObjekt);
+            ObjectToMove->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
+
+            if ( !m_bPickedUp )
+            {
+                m_bPickedUp = !m_bPickedUp;
+                playPickOrDrop(false);
+            }
+        }
+}
+
+void cSpieler::playPickOrDrop(bool DropSound)
+{
+    if (!DropSound)
     {
-        QVector3D camPos = m_cam->getPosition();
-        QVector3D lookDirection = m_cam->getViewDir();
+        int i = timerForScale.elapsed() % 4 ;
+        switch(i)
+        {
 
-        QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
-        matrixObjekt.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
-        ObjectToMove->setEngineModelMatrix(matrixObjekt);
-        ObjectToMove->setLinearVelocity(QVector3D(0.f, 0.f, 0.f));
+            case 0:
+
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup1.wav")));
+                file->play();
+                break;
+
+            case 1:
+
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup2.wav")));
+                file->play();
+                break;
+
+            case 2:
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup3.wav")));
+                file->play();
+                break;
+            case 3:
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup4.wav")));
+                file->play();
+                break;
+         }
+    }
+    else if (DropSound)
+    {
+
+        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/drop.wav")));
+        file->play();
     }
 
 }
-
 void cSpieler::scaleObject()
 {
-    ObjectToMove = getObjectInViewDirection();
 
-     if ( ObjectToMove != nullptr  )
-     {
-        QMatrix4x4 Scale = QMatrix4x4(5,0,0,0,
-                                      0,5,0,0,
-                                      0,0,5,0,
-                                      0,0,0,5);
-        QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
-        matrixObjekt =   Scale * matrixObjekt ;
-        ObjectToMove->setEngineModelMatrix(matrixObjekt);
+    if ( timerForScale.elapsed() > 500 )
+    {
+        ObjectToMove = getObjectInViewDirection();
+
+         if ( ObjectToMove != nullptr  )
+         {
+
+            QMatrix4x4 Scale = QMatrix4x4(2,0,0,0,
+                                          0,2,0,0,
+                                          0,0,2,0,
+                                          0,0,0,1);
+            QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
+            matrixObjekt =   Scale * matrixObjekt;
+            ObjectToMove->removeFromPhysicEngine();
+            ObjectToMove->setGeometryModelMatrix(&matrixObjekt);
+            ObjectToMove->addToPhysicEngine();
+            //ObjectToMove->getGeometry()->setModelMatrix(matrixObjekt);
+        }
     }
 }
 
@@ -86,18 +154,37 @@ void cSpieler::scaleObject()
 void cSpieler::isPressed()
 {
     if (keyIn->isKeyPressed('e'))
+        {
+            moveObject();
+            timerForSound.restart();
+        }
+        else
     {
-        moveObject();
+            m_bPickedUp = false;
+            if ( timerForSound.elapsed() > 50 && timerForSound.elapsed() < 100)
+            {
+                playPickOrDrop(true);
+            }
+
+
     }
+
     if (keyIn->isKeyPressed('q'))
-    {
-        scaleObject();
-    }
+        {
+            scaleObject();
+        }
 }
 
 
 void cSpieler::controlCamera()
 {
+
+//Crosshair aus
+    if (/*m_rootNode*/ false)
+    {
+         createCrosshair();
+    }
+   // else         qDebug("SetRoot Node in cSpieler!");
 
     isPressed();
 //---- KEYBOARD STEUERUNG
@@ -179,6 +266,17 @@ void cSpieler::controlCamera()
 
      m_cam->setPosition(m_cam->getPosition().x() + deltaPosition.x(), m_Height,m_cam->getPosition().z() + deltaPosition.z() );
 
+}
+
+void cSpieler::setRoot(Node * root)
+{
+    m_rootNode = root;
+}
+
+
+void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
+{
+    m_PhysicEngine = PhysicEngine;
 }
 
 Camera *cSpieler::getCamera()
