@@ -22,7 +22,6 @@ class cTree: public cObjekte
             static TriangleMesh * m_tmStamm;
 
             float m_fScale;
-            Geometry *m_GeoKrnone, *m_GeoStamm;
             Drawable * m_DrawKrone;
             Drawable * m_DrawStamm;
             Material *m_MatKrone, *m_MatStamm;
