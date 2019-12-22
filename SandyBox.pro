@@ -3,6 +3,7 @@ include(../../../Common.pri)
 TARGET = SandyBox
 
 SOURCES += \
+    brickshader.cpp \
     ckugel.cpp \
     cobjekte.cpp \
     cplane.cpp \
@@ -10,11 +11,13 @@ SOURCES += \
     cspieler.cpp \
     cszene.cpp \
     ctree.cpp \
+    cwand.cpp \
     cwelt.cpp \
     cwuerfel.cpp \
     myscene.cpp \
 
 HEADERS += \
+    brickShader.h \
     ckugel.h \
     cobjekte.h \
     cplane.h \
@@ -22,6 +25,7 @@ HEADERS += \
     cspieler.h \
     cszene.h \
     ctree.h \
+    cwand.h \
     cwelt.h \
     cwuerfel.h
 

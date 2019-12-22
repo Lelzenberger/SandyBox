@@ -7,7 +7,7 @@
 #include "texture.h"
 #include "QRandomGenerator"
 #include "cplane.h"
-
+#include "cwand.h"
 
 cSzene::cSzene()
 {
@@ -42,45 +42,29 @@ void cSzene::initWorld(float size)
 
     m_Root->addChild(m_ntWorld);
 
-    cPlane * wand1 = new cPlane();
-    cPlane * wand2 = new cPlane();
-    cPlane * wand3 = new cPlane();
-    cPlane * wand4 = new cPlane();
 
-    wand1->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
-    wand2->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
-    wand3->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
-    wand4->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, size, 3.0f, true);
+    cWand * wandX1 = new cWand();
+    wandX1->init(m_PhysicEngine, size, 3.0f);
+    wandX1->rotate(90.0f,QVector3D(0,1,0));
+    wandX1->translate(size/2.0f ,0.0f, 0.0f);
 
-    Transformation * m_tWand1 = new Transformation();
-    Transformation * m_tWand2 = new Transformation();
-    Transformation * m_tWand3 = new Transformation();
-    Transformation * m_tWand4 = new Transformation();
+    cWand * wandX2= new cWand();
+    wandX2->init(m_PhysicEngine, size, 3.0f);
+    wandX2->rotate(90.0f,QVector3D(0,1,0));
+    wandX2->translate(-size/2.0f, 0.0f,0.0f);
 
-    m_tWand1->translate(0.0f, 0.0f, size/2.0f);
-    m_tWand2->translate(-size/2.0f, 0.0f, 0.0f);
-    m_tWand3->translate(0.0f, 0.0f, -size/2.0f);
-    m_tWand4->translate(size/2.0f, 0.0f, 0.0f);
+    cWand * wandZ1 = new cWand();
+    wandZ1->init(m_PhysicEngine, size, 3.0f);
+    wandZ1->translate(0.0f,0.0f, size/2.0f);
+    cWand * wandZ2 = new cWand();
+    wandZ2->init(m_PhysicEngine, size, 3.0f);
+    wandZ2->translate(0.0f,0.0f, -size/2.0f);
 
-    m_tWand1->rotate(0.0f, 0.0f, 0.0f, 0.0f);
-    m_tWand2->rotate(90.0f, 0.0f, 1.0f, 0.0f);
-    m_tWand3->rotate(180.0f, 0.0f, 1.0f, 0.0f);
-    m_tWand4->rotate(270.0f, 0.0f, 1.0f, 0.0f);
+    m_Root->addChild(wandX1->getRoot());
+    m_Root->addChild(wandX2->getRoot());
+    m_Root->addChild(wandZ1->getRoot());
+    m_Root->addChild(wandZ2->getRoot());
 
-    Node * m_ntWand1 = new Node(m_tWand1);
-    Node * m_ntWand2 = new Node(m_tWand2);
-    Node * m_ntWand3 = new Node(m_tWand3);
-    Node * m_ntWand4 = new Node(m_tWand4);
-
-    m_ntWand1->addChild(wand1->getRoot());
-    m_ntWand2->addChild(wand2->getRoot());
-    m_ntWand3->addChild(wand3->getRoot());
-    m_ntWand4->addChild(wand4->getRoot());
-
-    m_Root->addChild(m_ntWand1);
-    m_Root->addChild(m_ntWand2);
-    m_Root->addChild(m_ntWand3);
-    m_Root->addChild(m_ntWand4);
 }
 
 void cSzene::initSun()

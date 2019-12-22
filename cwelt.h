@@ -9,6 +9,8 @@
 #include "ctree.h"
 #include "cplane.h"
 
+    extern int efSize;
+
 class cWelt :public cObjekte
 {
 public:
@@ -19,7 +21,7 @@ public:
 
 
 private:
-    int fSize;
+    int efSize = 0.0f;
     Texture *m_Texture;
     BumpMap *m_BumpMap;
 };

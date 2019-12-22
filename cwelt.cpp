@@ -4,7 +4,6 @@
 
 cWelt::cWelt()
 {
-
 }
 
  cWelt::~cWelt()
@@ -15,7 +14,7 @@ cWelt::cWelt()
  void cWelt::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm, int size)
  {
 
-     fSize = size;
+     efSize = size;
      m_Drawable = new Drawable(new SimplePlane(size));
      m_Drawable->setStaticGeometry(true);
      m_Root = new Node(m_Drawable);
@@ -42,5 +41,5 @@ cWelt::cWelt()
 
  int cWelt::returnSize()
  {
-     return  fSize;
+     return  efSize;
  }

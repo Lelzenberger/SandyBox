@@ -27,14 +27,13 @@ private:
     void scaleObject();
     void createCrosshair();
     void playPickOrDrop(bool DropSound);
-
+    void checkIfInField();
     Drawable * m_dCrosshair;
     Node * m_rootNode;
     SoundSource * file;
     void playFootStepSound();
     void playItemDropSound();
     void playItemPickUpFailSound();
-
     SoundSource * m_sPickup, * m_sDrop, * m_sFootstep;
 
     Camera * m_cam;

@@ -4,7 +4,7 @@
 #include "scenemanager.h"
 #include "simplesphere.h"
 #include "color.h"
-
+#include "cwelt.h"
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {
@@ -14,7 +14,7 @@ cSpieler::cSpieler(Camera * camera) : CameraController(camera)
     m_RightMouseButtonPressed = true;
     m_cam = camera;
     m_cam->lockZRotation();
-    CameraController::setMoveSpeed(0.5f * 0.1f);
+    CameraController::setMoveSpeed(0.66f * 0.1f);
     keyIn = InputRegistry::getInstance().getKeyboardInput();
 }
 
@@ -36,7 +36,7 @@ void cSpieler::createCrosshair()
     QVector3D camPos = m_cam->getPosition();
     QVector3D lookDirection = m_cam->getViewDir();
     QMatrix4x4 crossHairMatrix = m_dCrosshair->getWorldMatrix();
-    QMatrix4x4 old = m_dCrosshair->getWorldMatrix();
+    //QMatrix4x4 old = m_dCrosshair->getWorldMatrix();
 
 
     crossHairMatrix.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
@@ -45,8 +45,8 @@ void cSpieler::createCrosshair()
 // ----------------
     if (keyIn->isKeyPressed('r'))
     {
-        qDebug("OLD: %i", old.column(3));
-        qDebug("NEW: %i", crossHairMatrix.column(3));
+        //qDebug("OLD: %i", old.column(3));
+        //qDebug("NEW: %i", crossHairMatrix.column(3));
     }
 }
 
@@ -130,10 +130,7 @@ void cSpieler::playPickOrDrop(bool DropSound)
         file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/drop.wav")));
         file->play();
     }
-
 }
-
-
 
 
 void cSpieler::scaleObject()
@@ -222,14 +219,19 @@ void cSpieler::isPressed()
 void cSpieler::controlCamera()
 {
 
+
+    isPressed();
+    checkIfInField();
+
+
 //Crosshair aus
     if (/*m_rootNode*/ false)
     {
-         createCrosshair();
+         //createCrosshair();
     }
    // else         qDebug("SetRoot Node in cSpieler!");
 
-    isPressed();
+
 //---- KEYBOARD STEUERUNG
     QVector3D deltaPosition;
 
@@ -314,6 +316,22 @@ void cSpieler::controlCamera()
      m_cam->setPosition(m_cam->getPosition().x() + deltaPosition.x(), m_Height,m_cam->getPosition().z() + deltaPosition.z() );
 
 }
+
+void cSpieler::checkIfInField()
+{
+    float val = 23.5f;
+
+    if ( m_cam->getPosition().x() < - val )
+        m_cam->setPosition(-val, m_cam->getPosition().y(),m_cam->getPosition().z() );
+    if ( m_cam->getPosition().x() >  val)
+        m_cam->setPosition(val, m_cam->getPosition().y(),m_cam->getPosition().z() );
+
+    if ( m_cam->getPosition().z() < - val)
+        m_cam->setPosition(m_cam->getPosition().x(), m_cam->getPosition().y(),-val );
+    if ( m_cam->getPosition().z() >  val )
+        m_cam->setPosition(m_cam->getPosition().x(), m_cam->getPosition().y(), val );
+}
+
 
 void cSpieler::setRoot(Node * root)
 {
