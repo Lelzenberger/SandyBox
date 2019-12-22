@@ -2,11 +2,13 @@
 #include "inputregistry.h"
 #include "openglwidget.h"
 #include "scenemanager.h"
+#include "simplesphere.h"
+#include "color.h"
+
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {
     QString path(SRCDIR);
-
     m_PhysicEngine = nullptr;
     m_FollowMouse = true;
     m_RightMouseButtonPressed = true;
@@ -21,17 +23,32 @@ cSpieler::~cSpieler()
 
 }
 
-
-
-
-
-void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
+void cSpieler::createCrosshair()
 {
-    m_PhysicEngine = PhysicEngine;
+    if ( ! m_bCrosshairFirst )
+    {
+        m_dCrosshair = new Drawable(new SimpleSphere(1));
+        m_dCrosshair->getProperty<Color>()->setValue(1.0,0.0,0.0,1.0f);
+        m_rootNode->addChild(new Node(m_dCrosshair));
+        m_bCrosshairFirst = true;
+    }
+
+    QVector3D camPos = m_cam->getPosition();
+    QVector3D lookDirection = m_cam->getViewDir();
+    QMatrix4x4 crossHairMatrix = m_dCrosshair->getWorldMatrix();
+    QMatrix4x4 old = m_dCrosshair->getWorldMatrix();
+
+
+    crossHairMatrix.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
+//ER SETZTE DIE WERTE NICH?!? BERECHNET WERDEN SIE ABER!
+    m_dCrosshair->setModelMatrix(crossHairMatrix);
+// ----------------
+    if (keyIn->isKeyPressed('r'))
+    {
+        qDebug("OLD: %i", old.column(3));
+        qDebug("NEW: %i", crossHairMatrix.column(3));
+    }
 }
-
-
-
 
 
 PhysicObject* cSpieler::getObjectInViewDirection()
@@ -67,34 +84,51 @@ void cSpieler::moveObject()
             if ( !m_bPickedUp )
             {
                 m_bPickedUp = !m_bPickedUp;
-                int i = timerForScale.elapsed() % 4 ;
-                switch(i)
-                {
-
-                    case 0:
-
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup1.wav")));
-                        file->play();
-                        break;
-
-                    case 1:
-
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup2.wav")));
-                        file->play();
-                        break;
-
-                    case 2:
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup3.wav")));
-                        file->play();
-                        break;
-                    case 3:
-                        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup4.wav")));
-                        file->play();
-                        break;
-                 }
+                playPickOrDrop(false);
             }
         }
 }
+
+void cSpieler::playPickOrDrop(bool DropSound)
+{
+    if (!DropSound)
+    {
+        int i = timerForScale.elapsed() % 4 ;
+        switch(i)
+        {
+
+            case 0:
+
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup1.wav")));
+                file->play();
+                break;
+
+            case 1:
+
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup2.wav")));
+                file->play();
+                break;
+
+            case 2:
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup3.wav")));
+                file->play();
+                break;
+            case 3:
+                file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickup4.wav")));
+                file->play();
+                break;
+         }
+    }
+    else if (DropSound)
+    {
+
+        file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/drop.wav")));
+        file->play();
+    }
+
+}
+
+
 
 
 void cSpieler::scaleObject()
@@ -126,19 +160,37 @@ void cSpieler::scaleObject()
 void cSpieler::isPressed()
 {
     if (keyIn->isKeyPressed('e'))
-    {
-        moveObject();
-    } else
-        m_bPickedUp = false;
-    if (keyIn->isKeyPressed('q'))
-    {
-        scaleObject();
+        {
+            moveObject();
+            timerForSound.restart();
+        }
+        else
+            m_bPickedUp = false;
+            if ( timerForSound.elapsed() > 50 && timerForSound.elapsed() < 55)
+            {
+                playPickOrDrop(true);
+            }
+
+
     }
+
+
+    if (keyIn->isKeyPressed('q'))
+        {
+            scaleObject();
+        }
 }
 
 
 void cSpieler::controlCamera()
 {
+
+//Crosshair aus
+    if (/*m_rootNode*/ false)
+    {
+         createCrosshair();
+    }
+   // else         qDebug("SetRoot Node in cSpieler!");
 
     isPressed();
 //---- KEYBOARD STEUERUNG
@@ -220,6 +272,17 @@ void cSpieler::controlCamera()
 
      m_cam->setPosition(m_cam->getPosition().x() + deltaPosition.x(), m_Height,m_cam->getPosition().z() + deltaPosition.z() );
 
+}
+
+void cSpieler::setRoot(Node * root)
+{
+    m_rootNode = root;
+}
+
+
+void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
+{
+    m_PhysicEngine = PhysicEngine;
 }
 
 Camera *cSpieler::getCamera()

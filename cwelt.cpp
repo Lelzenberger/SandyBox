@@ -1,7 +1,8 @@
 #include "cwelt.h"
 #include "simpleplane.h"
 
-cWelt::cWelt()
+
+cWelt::cWelt(int Size) : fSize(Size)
 {
 
 }
@@ -35,4 +36,9 @@ cWelt::cWelt()
      m_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxAABB);
      m_PhysicObject->setConstructionInfo(m_PhysicObjectConstructionInfo);
      m_PhysicObject->registerPhysicObject();
+ }
+
+ int cWelt::returnSize()
+ {
+     return  fSize;
  }
