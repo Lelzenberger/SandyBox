@@ -5,7 +5,6 @@
 #include "fboproperty.h"
 #include "simplecube.h"
 #include "texture.h"
-#include "QRandomGenerator"
 #include "cplane.h"
 #include "cwand.h"
 
@@ -114,7 +113,7 @@ void cSzene::initCubes()
 
 void cSzene::initTrees()
 {
-    QRandomGenerator temp;
+    temp = QRandomGenerator::securelySeeded();
     int worldSize = m_world->returnSize()/2;
     for (int i = 0; i < treeCount; i++)
     {
@@ -136,7 +135,7 @@ void cSzene::initTrees()
 
         m_tTree[i] = new Transformation();
         m_tTree[i]->translate(X,0,Z);
-
+        qDebug("Tree %i : [%i|%i]", i, X,Z);
         m_ntTree[i] = new Node(m_tTree[i]);
         m_ntTree[i]->addChild(tree[i]->getRoot());
 

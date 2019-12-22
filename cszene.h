@@ -14,6 +14,7 @@
 #include "soundsource.h"
 #include "cskybox.h"
 #include "ctree.h"
+#include "QRandomGenerator"
 
 #define cubeCount 15
 #define treeCount 30
@@ -50,7 +51,7 @@ class cSzene
             Transformation *m_tCube[cubeCount], *m_tTree[treeCount], *m_tWorld, *m_tSunLight;
             AudioListener *m_AudioListener;
             SoundSource *m_AmbientSound;
-            cTree *test;
+            QRandomGenerator temp;
 };
 
 #endif // CSZENE_H
