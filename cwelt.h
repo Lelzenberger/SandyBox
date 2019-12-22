@@ -12,7 +12,7 @@
 class cWelt :public cObjekte
 {
 public:
-    cWelt(int Size);
+    cWelt();
     ~cWelt();
     void init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm, int size);
 	int returnSize();

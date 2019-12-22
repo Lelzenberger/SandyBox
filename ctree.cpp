@@ -4,10 +4,6 @@
 TriangleMesh * cTree::m_tmKrone = new TriangleMesh(SRCDIR+QString("/modelstextures/Krone.obj"));
 TriangleMesh * cTree::m_tmStamm = new TriangleMesh(SRCDIR+QString("/modelstextures/Baumstamm.obj"));
 
-
-TriangleMesh * cTree::m_tmKrone = new TriangleMesh(SRCDIR+QString("/modelstextures/Krone.obj"));
-TriangleMesh * cTree::m_tmStamm = new TriangleMesh(SRCDIR+QString("/modelstextures/Baumstamm.obj"));
-
 cTree::cTree()
 {
 
@@ -15,26 +11,6 @@ cTree::cTree()
 
 cTree::~cTree()
 {
-<<<<<<< HEAD
-    m_fScale = fScale*0.06f;
-    m_dKrone = new Drawable(m_tmKrone);
-    m_dKrone->setStaticGeometry(true);
-    m_dStamm = new Drawable(m_tmStamm);
-    m_dStamm->setStaticGeometry(true);
-    Transformation * t_Scale = new Transformation();
-    Transformation * t_Krone = new Transformation();
-
-    t_Krone->translate(0,60,0);
-    Node * ntKrone = new Node(t_Krone);
-
-    ntKrone->addChild(new Node(m_dKrone));
-    t_Scale->scale(QVector3D(m_fScale,m_fScale,m_fScale));
-
-    m_Root = new Node(t_Scale);
-    m_Root->addChild(ntKrone);
-    m_Root->addChild(new Node(m_dStamm));
-=======
->>>>>>> master
 
 }
 
