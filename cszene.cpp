@@ -103,8 +103,8 @@ void cSzene::initTrees()
         }
 
         tree[i] = new cTree();
-        tree[i]->init(temp.bounded(3,11)*0.2);                  //RandomSize
-        tree[i]->registerAtPhysicEngine(m_PhysicEngine);
+        tree[i]->init(temp.bounded(3,11)*0.2, m_PhysicEngine, m_ShaderTree);                  //RandomSize
+        //tree[i]->registerAtPhysicEngine(m_PhysicEngine);
 
         m_tTree[i] = new Transformation();
         m_tTree[i]->translate(X,0,Z);
@@ -124,6 +124,7 @@ Node *cSzene::init()
     m_iPhysicEngineSlot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
     m_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(m_iPhysicEngineSlot);
     m_Shader = ShaderManager::getShader<Shader>("://shaders/phongFrag.vert", "://shaders/phongFrag.frag");
+    m_ShaderTree = ShaderManager::getShader<Shader>("://shaders/Stand.vert", "://shaders/Stand.frag");
     m_ShaderWorld = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
     m_ShaderSkyBox = ShaderManager::getShader<Shader>("://shaders/skybox.vert", "://shaders/texturecube.frag");
 

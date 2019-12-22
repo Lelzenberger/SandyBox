@@ -44,7 +44,7 @@ class cSzene
             Node *m_Root, *m_ntCube[cubeCount],*m_ntTree[treeCount], *m_ntWorld, *m_ntSun, *m_nAudio;
             PhysicEngine *m_PhysicEngine;
             int m_iPhysicEngineSlot;
-            Shader *m_Shader, *m_ShaderWorld, *m_ShaderSkyBox;
+            Shader *m_Shader, *m_ShaderWorld, *m_ShaderSkyBox, *m_ShaderTree;
             Texture *m_Texture, *m_TextureSkyBox;
             BumpMap *m_BumpMap;
             Transformation *m_tCube[cubeCount], *m_tTree[treeCount], *m_tWorld, *m_tSun;
