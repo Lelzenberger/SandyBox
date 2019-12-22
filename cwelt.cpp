@@ -14,7 +14,7 @@ cWelt::cWelt(int Size) : fSize(Size)
 
  void cWelt::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm)
  {
-     m_Drawable = new Drawable(new SimplePlane(fSize));
+     m_Drawable = new Drawable(new SimplePlane(50.f));
      m_Drawable->setStaticGeometry(true);
      m_Root = new Node(m_Drawable);
      m_Material = new Material();
