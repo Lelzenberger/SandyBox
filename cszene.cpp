@@ -104,7 +104,6 @@ void cSzene::initTrees()
 
         tree[i] = new cTree();
         tree[i]->init(temp.bounded(3,11)*0.2, m_PhysicEngine, m_ShaderTree);                  //RandomSize
-        //tree[i]->registerAtPhysicEngine(m_PhysicEngine);
 
         m_tTree[i] = new Transformation();
         m_tTree[i]->translate(X,0,Z);

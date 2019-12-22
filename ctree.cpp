@@ -1,6 +1,9 @@
 #include "ctree.h"
 #include "trianglemesh.h"
 
+TriangleMesh * cTree::m_tmKrone = new TriangleMesh(SRCDIR+QString("/modelstextures/Krone.obj"));
+TriangleMesh * cTree::m_tmStamm = new TriangleMesh(SRCDIR+QString("/modelstextures/Baumstamm.obj"));
+
 
 cTree::cTree()
 {
@@ -18,8 +21,8 @@ void cTree::init(float fScale, PhysicEngine *pe, Shader *s)
     m_Shader = s;
     m_PhysicEngine = pe;
 
-    m_DrawStamm = new Drawable(new TriangleMesh(SRCDIR+QString("/modelstextures/Baumstamm.obj")));
-    m_DrawKrone = new Drawable(new TriangleMesh(SRCDIR+QString("/modelstextures/Krone.obj")));
+    m_DrawStamm = new Drawable(m_tmStamm);
+    m_DrawKrone = new Drawable(m_tmKrone);
 
     m_MatStamm = m_DrawStamm->getProperty<Material>();
     m_MatStamm->setAmbient(0.27f, 0.13f, 0.03f, 1.0f);
