@@ -4,7 +4,6 @@
 TriangleMesh * cTree::m_tmKrone = new TriangleMesh(SRCDIR+QString("/modelstextures/Krone.obj"));
 TriangleMesh * cTree::m_tmStamm = new TriangleMesh(SRCDIR+QString("/modelstextures/Baumstamm.obj"));
 
-
 cTree::cTree()
 {
 
@@ -63,7 +62,9 @@ void cTree::init(float fScale, PhysicEngine *pe, Shader *s)
 
     m_PhysicObject = m_PhysicEngine->createNewPhysicObject(m_DrawStamm);
     m_PhysicObjectConstructionInfo= new PhysicObjectConstructionInfo();
+
     m_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxAABB);
     m_PhysicObject->setConstructionInfo(m_PhysicObjectConstructionInfo);
     m_PhysicObject->registerPhysicObject();
+
 }

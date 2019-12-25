@@ -1,11 +1,11 @@
 #ifndef CSKYBOX_H
 #define CSKYBOX_H
 
-#include "cobjekte.h"
+#include "objects.h"
 #include "texture.h"
 #include "shader.h"
 
-class cSkyBox : public cObjekte
+class cSkyBox : public Objects
 {
     public:
            cSkyBox();

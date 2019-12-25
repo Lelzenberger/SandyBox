@@ -5,7 +5,8 @@
 #include "fboproperty.h"
 #include "simplecube.h"
 #include "texture.h"
-#include "QRandomGenerator"
+#include "cplane.h"
+#include "cwand.h"
 
 cSzene::cSzene()
 {
@@ -24,24 +25,33 @@ PhysicEngine* cSzene::getPhysicEngine()
 
 void cSzene::initWorld()
 {
+    m_World = new World();
+
+    m_World->init(m_PhysicEngine);
+
+    m_Root->addChild(m_World->getRoot());
+}
+
+void cSzene::initWall()
+{
     QString path(SRCDIR);
-    m_Texture = new Texture(path + QString("/modelstextures/grass.jpg"));
-    m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
+    m_Texture = new Texture(path + QString("/modelstextures/masonry-wall-texture.jpg"));
+    m_BumpMap = new BumpMap(path + QString("/modelstextures/masonry-wall-normal-map.jpg"));
 
-    m_world = new cWelt(50);
-    m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
+    m_Wall = new cWand();
 
-    m_tWorld = new Transformation();
-    m_tWorld->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
+    m_Wall->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
 
-    m_ntWorld = new Node(m_tWorld);
-    m_ntWorld->addChild(m_world->getRoot());
+    m_tWall = new Transformation();
+    m_ntWall = new Node(m_tWall);
+    m_ntWall->addChild(m_Wall->getRoot());
 
-    m_Root->addChild(m_ntWorld);
+    m_Root->addChild(m_ntWall);
 }
 
 void cSzene::initSun()
 {
+
     m_SunLight = new SunLight();
 
     m_SunLight->setAmbient(1.0f, 1.0f, 1.0f);
@@ -54,6 +64,7 @@ void cSzene::initSun()
     m_ntSunLight = new Node(m_tSunLight);
     m_ntSunLight->addChild(new Node(m_SunLight));
     m_Root->addChild(m_ntSunLight);
+
 }
 
 void cSzene::initSkyBox()
@@ -69,15 +80,14 @@ void cSzene::initCubes()
 {
     for (int i = 0; i < cubeCount; i++)
     {
-        cube[i] = new cWuerfel();
-        cube[i]->init(m_Shader, m_PhysicEngine, m_TextureSkyBox);
-
+        m_Cubes[i] = new Cube();
+        m_Cubes[i]->init(m_PhysicEngine);
 
         m_tCube[i] = new Transformation();
         m_tCube[i]->translate(0, float(i * 1.5f), 0.0f);
 
         m_ntCube[i] = new Node(m_tCube[i]);
-        m_ntCube[i]->addChild(cube[i]->getRoot());
+        m_ntCube[i]->addChild(m_Cubes[i]->getRoot());
 
         m_Root->addChild(m_ntCube[i]);
     }
@@ -85,8 +95,8 @@ void cSzene::initCubes()
 
 void cSzene::initTrees()
 {
-    QRandomGenerator temp;
-    int worldSize = m_world->returnSize()/2;
+    temp = QRandomGenerator::securelySeeded();
+    int worldSize = 50/2;
     for (int i = 0; i < treeCount; i++)
     {
         long X = 0;
@@ -101,13 +111,13 @@ void cSzene::initTrees()
 
                 //doppelt damit evtl n bisschen "zeit" vergeht und er nicht dich 2 gleich variablen nimmt? kp ob das was bringt
         }
-
         tree[i] = new cTree();
         tree[i]->init(temp.bounded(3,11)*0.2, m_PhysicEngine, m_ShaderTree);                  //RandomSize
 
+
         m_tTree[i] = new Transformation();
         m_tTree[i]->translate(X,0,Z);
-
+        qDebug("Tree %i : [%i|%i]", i, X,Z);
         m_ntTree[i] = new Node(m_tTree[i]);
         m_ntTree[i]->addChild(tree[i]->getRoot());
 
@@ -135,10 +145,12 @@ Node *cSzene::init()
     m_AmbientSound->play();
     m_Root->addChild(m_nAudio);
 
+
     initSkyBox();
     initCubes();
     initSun();
     initWorld();
+    initWall();
     initTrees();
 
     return m_Root;

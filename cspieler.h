@@ -9,6 +9,7 @@
 #include "node.h"
 #include "drawable.h"
 
+
 class cSpieler : public CameraController
 {
 public:
@@ -26,10 +27,15 @@ private:
     void scaleObject();
     void createCrosshair();
     void playPickOrDrop(bool DropSound);
-
+    void checkIfInField();
     Drawable * m_dCrosshair;
     Node * m_rootNode;
     SoundSource * file;
+    void playFootStepSound();
+    void playItemDropSound();
+    void playItemPickUpFailSound();
+    SoundSource * m_sPickup, * m_sDrop, * m_sFootstep;
+
     Camera * m_cam;
     PhysicEngine * m_PhysicEngine;
     bool m_RightMouseButtonPressed, m_FollowMouse = false;
@@ -39,8 +45,7 @@ private:
     PhysicObject* v_PhysicObject;
     PhysicObject * ObjectToMove;
     KeyboardInput* keyIn;
-    QElapsedTimer timerForScale;
-    QElapsedTimer timerForSound;
+    QElapsedTimer timerForScale, timerForSounds, timerForItemDrop;
     PhysicObject * m_PhysicObject;
 protected:
     virtual void controlCamera() override;

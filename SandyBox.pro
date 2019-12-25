@@ -3,27 +3,27 @@ include(../../../Common.pri)
 TARGET = SandyBox
 
 SOURCES += \
-    ckugel.cpp \
-    cobjekte.cpp \
+    objects.cpp \
     cskybox.cpp \
     cspieler.cpp \
-    csun.cpp \
     cszene.cpp \
     ctree.cpp \
-    cwelt.cpp \
-    cwuerfel.cpp \
+    cwand.cpp \
+    world.cpp \
+    cube.cpp \
+    ownplane.cpp\
     myscene.cpp \
 
 HEADERS += \
-    ckugel.h \
-    cobjekte.h \
+    objects.h \
     cskybox.h \
     cspieler.h \
-    csun.h \
     cszene.h \
     ctree.h \
-    cwelt.h \
-    cwuerfel.h
+    cwand.h \
+    world.h \
+    cube.h \
+    ownplane.h \
 
 RESOURCES += \
     MyShaders.qrc

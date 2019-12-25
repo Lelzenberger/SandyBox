@@ -4,16 +4,17 @@
 #include "scenemanager.h"
 #include "simplesphere.h"
 #include "color.h"
-
+#include "world.h"
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {
+    QString path(SRCDIR);
     m_PhysicEngine = nullptr;
     m_FollowMouse = true;
     m_RightMouseButtonPressed = true;
     m_cam = camera;
     m_cam->lockZRotation();
-    CameraController::setMoveSpeed(0.5f * 0.1f);
+    CameraController::setMoveSpeed(0.66f * 0.1f);
     keyIn = InputRegistry::getInstance().getKeyboardInput();
 }
 
@@ -35,7 +36,7 @@ void cSpieler::createCrosshair()
     QVector3D camPos = m_cam->getPosition();
     QVector3D lookDirection = m_cam->getViewDir();
     QMatrix4x4 crossHairMatrix = m_dCrosshair->getWorldMatrix();
-    QMatrix4x4 old = m_dCrosshair->getWorldMatrix();
+    //QMatrix4x4 old = m_dCrosshair->getWorldMatrix();
 
 
     crossHairMatrix.setColumn(3, (camPos + 5 * lookDirection).toVector4D());
@@ -44,8 +45,8 @@ void cSpieler::createCrosshair()
 // ----------------
     if (keyIn->isKeyPressed('r'))
     {
-        qDebug("OLD: %i", old.column(3));
-        qDebug("NEW: %i", crossHairMatrix.column(3));
+        //qDebug("OLD: %i", old.column(3));
+        //qDebug("NEW: %i", crossHairMatrix.column(3));
     }
 }
 
@@ -84,7 +85,12 @@ void cSpieler::moveObject()
             {
                 m_bPickedUp = !m_bPickedUp;
                 playPickOrDrop(false);
+
             }
+        }
+        else
+        {
+            playItemPickUpFailSound();
         }
 }
 
@@ -124,8 +130,9 @@ void cSpieler::playPickOrDrop(bool DropSound)
         file = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/drop.wav")));
         file->play();
     }
-
 }
+
+
 void cSpieler::scaleObject()
 {
 
@@ -146,7 +153,38 @@ void cSpieler::scaleObject()
             ObjectToMove->setGeometryModelMatrix(&matrixObjekt);
             ObjectToMove->addToPhysicEngine();
             //ObjectToMove->getGeometry()->setModelMatrix(matrixObjekt);
+            timerForScale.restart();
         }
+    }
+}
+
+void cSpieler::playFootStepSound()
+{
+    if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
+    {
+        m_sFootstep = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/walkingOnGrass.mp3")));
+        m_sFootstep->play();
+        timerForSounds.restart();
+    }
+}
+
+void cSpieler::playItemDropSound()
+{
+    if ( timerForItemDrop.elapsed() >  300 && m_bPickedUp)
+    {
+        m_sDrop = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/ObjectRelease.wav")));
+        m_sDrop->play();
+        timerForItemDrop.restart();
+    }
+}
+
+void cSpieler::playItemPickUpFailSound()
+{
+    if ( timerForSounds.elapsed() > 400 )
+    {
+        m_sPickup = new SoundSource(new SoundFile(SRCDIR+QString("/sounds/pickupfail.wav")));
+        m_sPickup->play();
+        timerForSounds.restart();
     }
 }
 
@@ -156,18 +194,20 @@ void cSpieler::isPressed()
     if (keyIn->isKeyPressed('e'))
         {
             moveObject();
-            timerForSound.restart();
+            timerForScale.restart();
         }
         else
     {
             m_bPickedUp = false;
-            if ( timerForSound.elapsed() > 50 && timerForSound.elapsed() < 100)
+            if ( timerForScale.elapsed() > 50 && timerForScale.elapsed() < 100)
             {
                 playPickOrDrop(true);
             }
 
 
+
     }
+
 
     if (keyIn->isKeyPressed('q'))
         {
@@ -179,32 +219,41 @@ void cSpieler::isPressed()
 void cSpieler::controlCamera()
 {
 
+
+    isPressed();
+    checkIfInField();
+
+
 //Crosshair aus
     if (/*m_rootNode*/ false)
     {
-         createCrosshair();
+         //createCrosshair();
     }
    // else         qDebug("SetRoot Node in cSpieler!");
 
-    isPressed();
+
 //---- KEYBOARD STEUERUNG
     QVector3D deltaPosition;
 
     keyIn = InputRegistry::getInstance().getKeyboardInput();
     if (keyIn->isKeyPressed('w'))
     {
+        playFootStepSound();
         deltaPosition += mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('s'))
     {
+        playFootStepSound();
         deltaPosition -= mCamera->getViewDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('a'))
     {
+        playFootStepSound();
         deltaPosition -= mCamera->getRightDir() * mMoveSpeed;
     }
     if (keyIn->isKeyPressed('d'))
     {
+        playFootStepSound();
         deltaPosition += mCamera->getRightDir() * mMoveSpeed;
     }
 
@@ -267,6 +316,22 @@ void cSpieler::controlCamera()
      m_cam->setPosition(m_cam->getPosition().x() + deltaPosition.x(), m_Height,m_cam->getPosition().z() + deltaPosition.z() );
 
 }
+
+void cSpieler::checkIfInField()
+{
+    float val = 23.5f;
+
+    if ( m_cam->getPosition().x() < - val )
+        m_cam->setPosition(-val, m_cam->getPosition().y(),m_cam->getPosition().z() );
+    if ( m_cam->getPosition().x() >  val)
+        m_cam->setPosition(val, m_cam->getPosition().y(),m_cam->getPosition().z() );
+
+    if ( m_cam->getPosition().z() < - val)
+        m_cam->setPosition(m_cam->getPosition().x(), m_cam->getPosition().y(),-val );
+    if ( m_cam->getPosition().z() >  val )
+        m_cam->setPosition(m_cam->getPosition().x(), m_cam->getPosition().y(), val );
+}
+
 
 void cSpieler::setRoot(Node * root)
 {

@@ -4,14 +4,14 @@
 #include "drawable.h"
 #include "trianglemesh.h"
 #include "transformation.h"
-#include "cobjekte.h"
+#include "objects.h"
 #include "physicengine.h"
 #include "trianglemesh.h"
 #include "shader.h"
 
-class cTree: public cObjekte
-{
 
+class cTree: public Objects
+{
     public:
             cTree();
             ~cTree();
@@ -22,6 +22,7 @@ class cTree: public cObjekte
             static TriangleMesh * m_tmStamm;
 
             float m_fScale;
+            Geometry *m_GeoKrnone, *m_GeoStamm;
             Drawable * m_DrawKrone;
             Drawable * m_DrawStamm;
             Material *m_MatKrone, *m_MatStamm;

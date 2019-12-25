@@ -12,5 +12,7 @@
         <file>shaders/texturecube.frag</file>
         <file>shaders/Stand.frag</file>
         <file>shaders/Stand.vert</file>
+        <file>shaders/brick.frag</file>
+        <file>shaders/brick.vert</file>
     </qresource>
 </RCC>
