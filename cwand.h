@@ -1,21 +1,23 @@
 #ifndef CWAND_H
 #define CWAND_H
-#include "cobjekte.h"
-#include "simpleplane.h"
+#include "objects.h"
+#include "bumpmap.h"
+#include "shader.h"
+#include "texture.h"
 
-class cWand : public cObjekte
+class cWand : public Objects
 {
 public:
     cWand();
     ~cWand();
-    void init(PhysicEngine *pe, float sizeX, float sizeY);
-    void translate(float x, float y, float z);
-    void rotate(float angle, QVector3D umDiesenVektorWirdGedreht);
+    void init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm);
+
+
 private:
-    Transformation * m_transformation;
-    Transformation * m_rotation;
-    Node * m_transNode;
-    Node * m_rotateNode;
+    static Geometry * m_Geo;
+    Texture *m_Texture;
+    BumpMap *m_BumpMap;
+    void initWand(float transX, float transZ, QVector3D rotAxis, float angle);
 };
 
 #endif // CWAND_H

@@ -4,13 +4,13 @@
 #include "drawable.h"
 #include "trianglemesh.h"
 #include "transformation.h"
-#include "cobjekte.h"
+#include "objects.h"
 #include "physicengine.h"
 #include "trianglemesh.h"
 #include "shader.h"
 
 
-class cTree: public cObjekte
+class cTree: public Objects
 {
     public:
             cTree();

@@ -4,7 +4,7 @@
 #include "scenemanager.h"
 #include "simplesphere.h"
 #include "color.h"
-#include "cwelt.h"
+#include "world.h"
 
 cSpieler::cSpieler(Camera * camera) : CameraController(camera)
 {

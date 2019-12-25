@@ -23,47 +23,30 @@ PhysicEngine* cSzene::getPhysicEngine()
     return m_PhysicEngine;
 }
 
-void cSzene::initWorld(float size)
+void cSzene::initWorld()
+{
+    m_World = new World();
+
+    m_World->init(m_PhysicEngine);
+
+    m_Root->addChild(m_World->getRoot());
+}
+
+void cSzene::initWall()
 {
     QString path(SRCDIR);
-    m_Texture = new Texture(path + QString("/modelstextures/grass.jpg"));
-    m_BumpMap = new BumpMap(path + QString("/modelstextures/gravel-bump-map-4k.jpg"));
+    m_Texture = new Texture(path + QString("/modelstextures/masonry-wall-texture.jpg"));
+    m_BumpMap = new BumpMap(path + QString("/modelstextures/masonry-wall-normal-map.jpg"));
 
-    m_world = new cWelt();
-    m_world->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap, static_cast<int>(size));
+    m_Wall = new cWand();
 
+    m_Wall->init(m_ShaderWorld, m_PhysicEngine, m_Texture, m_BumpMap);
 
-    m_tWorld = new Transformation();
-    m_tWorld->rotate(-90.0f, 1.0f, 0.0f, 0.0f);
+    m_tWall = new Transformation();
+    m_ntWall = new Node(m_tWall);
+    m_ntWall->addChild(m_Wall->getRoot());
 
-    m_ntWorld = new Node(m_tWorld);
-    m_ntWorld->addChild(m_world->getRoot());
-
-    m_Root->addChild(m_ntWorld);
-
-
-    cWand * wandX1 = new cWand();
-    wandX1->init(m_PhysicEngine, size, 3.0f);
-    wandX1->rotate(90.0f,QVector3D(0,1,0));
-    wandX1->translate(size/2.0f ,0.0f, 0.0f);
-
-    cWand * wandX2= new cWand();
-    wandX2->init(m_PhysicEngine, size, 3.0f);
-    wandX2->rotate(90.0f,QVector3D(0,1,0));
-    wandX2->translate(-size/2.0f, 0.0f,0.0f);
-
-    cWand * wandZ1 = new cWand();
-    wandZ1->init(m_PhysicEngine, size, 3.0f);
-    wandZ1->translate(0.0f,0.0f, size/2.0f);
-    cWand * wandZ2 = new cWand();
-    wandZ2->init(m_PhysicEngine, size, 3.0f);
-    wandZ2->translate(0.0f,0.0f, -size/2.0f);
-
-    m_Root->addChild(wandX1->getRoot());
-    m_Root->addChild(wandX2->getRoot());
-    m_Root->addChild(wandZ1->getRoot());
-    m_Root->addChild(wandZ2->getRoot());
-
+    m_Root->addChild(m_ntWall);
 }
 
 void cSzene::initSun()
@@ -97,15 +80,14 @@ void cSzene::initCubes()
 {
     for (int i = 0; i < cubeCount; i++)
     {
-        cube[i] = new cWuerfel();
-        cube[i]->init(m_Shader, m_PhysicEngine, m_TextureSkyBox);
-
+        m_Cubes[i] = new Cube();
+        m_Cubes[i]->init(m_PhysicEngine);
 
         m_tCube[i] = new Transformation();
         m_tCube[i]->translate(0, float(i * 1.5f), 0.0f);
 
         m_ntCube[i] = new Node(m_tCube[i]);
-        m_ntCube[i]->addChild(cube[i]->getRoot());
+        m_ntCube[i]->addChild(m_Cubes[i]->getRoot());
 
         m_Root->addChild(m_ntCube[i]);
     }
@@ -114,7 +96,7 @@ void cSzene::initCubes()
 void cSzene::initTrees()
 {
     temp = QRandomGenerator::securelySeeded();
-    int worldSize = m_world->returnSize()/2;
+    int worldSize = 50/2;
     for (int i = 0; i < treeCount; i++)
     {
         long X = 0;
@@ -167,7 +149,8 @@ Node *cSzene::init()
     initSkyBox();
     initCubes();
     initSun();
-    initWorld(50.0f);
+    initWorld();
+    initWall();
     initTrees();
 
     return m_Root;
