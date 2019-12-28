@@ -1,32 +1,29 @@
-#ifndef CSZENE_H
-#define CSZENE_H
+#ifndef OWNSCENE_H
+#define OWNSCENE_H
 
 #include "node.h"
 #include "physicengine.h"
-#include "shader.h"
 #include "transformation.h"
 #include "cube.h"
 #include "world.h"
 #include "sunlight.h"
-#include "bumpmap.h"
-#include "texture.h"
 #include "audiolistener.h"
 #include "soundsource.h"
-#include "cskybox.h"
-#include "ctree.h"
+#include "skybox.h"
+#include "tree.h"
 #include "QRandomGenerator"
-#include "cwand.h"
+#include "wall.h"
 
 #define cubeCount 15
 #define treeCount 30
-#define SPAWNRADIUS 5
+#define SPAWNRADIUS 6
 
 
-class cSzene
+class OwnScene
 {
     public:
-            cSzene();
-            ~cSzene();
+            OwnScene();
+            ~OwnScene();
             Node *init();
             PhysicEngine *getPhysicEngine();
             SoundSource * getSoundSource();
@@ -40,21 +37,23 @@ class cSzene
 
 
             Cube *m_Cubes[cubeCount];
-            cTree *tree[treeCount];
+            Tree *m_Tree[treeCount];
             World *m_World;
-            cWand *m_Wall;
+            Wall *m_Wall;
             SunLight *m_SunLight;
-            cSkyBox *m_SkyBox;
-            Node *m_Root, *m_ntCube[cubeCount],*m_ntTree[treeCount], *m_ntWorld, *m_ntWall, *m_ntSunLight, *m_nAudio;
+            SkyBox *m_SkyBox;
+            Node *m_Root, *m_ntCube[cubeCount],*m_ntTree[treeCount], *m_ntSunLight, *m_nAudio;
             PhysicEngine *m_PhysicEngine;
-            int m_iPhysicEngineSlot;
-            Shader *m_Shader, *m_ShaderWorld, *m_ShaderSkyBox, *m_ShaderTree;
-            Texture *m_Texture, *m_TextureSkyBox;
-            BumpMap *m_BumpMap;
-            Transformation *m_tCube[cubeCount], *m_tTree[treeCount], *m_tWorld, *m_tWall, *m_tSunLight;
+            int m_iPhysicEngineSlot;      
+            Transformation *m_tCube[cubeCount], *m_tTree[treeCount], *m_tSunLight;
             AudioListener *m_AudioListener;
             SoundSource *m_AmbientSound;
             QRandomGenerator temp;
+
+            Shader *m_Shader;
+            Texture *m_Texture;
+            BumpMap *m_BumpMap;
+            Geometry *m_Geometry;
 };
 
-#endif // CSZENE_H
+#endif

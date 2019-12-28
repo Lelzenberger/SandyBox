@@ -8,10 +8,7 @@ class World :public Objects
 public:
     World();
     ~World();
-    void init(PhysicEngine *physicEngine);
-
-private:
-    static Geometry *m_Geometry;
+    void init(PhysicEngine *physicEngine, Texture *texture, BumpMap *bumpMap, Shader *shader, Geometry *geometry);
 };
 
 #endif

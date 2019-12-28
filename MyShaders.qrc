@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>shaders/phongFrag.frag</file>
-        <file>shaders/phongFrag.vert</file>
         <file>shaders/common.vert.inc</file>
         <file>shaders/commonlight.vert.inc</file>
         <file>shaders/commonlightmatdefs.inc</file>
@@ -12,7 +10,5 @@
         <file>shaders/texturecube.frag</file>
         <file>shaders/Stand.frag</file>
         <file>shaders/Stand.vert</file>
-        <file>shaders/brick.frag</file>
-        <file>shaders/brick.vert</file>
     </qresource>
 </RCC>

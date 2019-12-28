@@ -1,5 +1,5 @@
-#ifndef CSPIELER_H
-#define CSPIELER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "camera.h"
 #include "cameracontroller.h"
@@ -10,11 +10,11 @@
 #include "drawable.h"
 
 
-class cSpieler : public CameraController
+class Player : public CameraController
 {
 public:
-    cSpieler(Camera * camera);
-    virtual ~cSpieler();
+    Player(Camera * camera);
+    virtual ~Player();
 
     void setRoot(Node* root);
     void setPhysicEngine(PhysicEngine * PhysicEngine);

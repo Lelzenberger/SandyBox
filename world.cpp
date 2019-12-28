@@ -2,8 +2,6 @@
 #include "ownplane.h"
 #include "shadermanager.h"
 
-Geometry * World::m_Geometry = new OwnPlane(50.0f, 50.0f);
-
 World::World()
 {
 
@@ -14,21 +12,22 @@ World::~World()
 
 }
 
-void World::init(PhysicEngine *physicEngine)
+void World::init(PhysicEngine *physicEngine, Texture *texture, BumpMap *bumpMap, Shader *shader, Geometry *geometry)
 {
-    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Ground_Grass_001_COLOR.jpg"));
-    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Ground_Grass_001_NORM.jpg"));
-    m_Shader = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
     m_PhysicEngine = physicEngine;
+    m_Texture = texture;
+    m_BumpMap = bumpMap;
+    m_Shader = shader;
+    m_Geometry = geometry;
 
     m_Drawable = new Drawable(m_Geometry);
     m_Drawable->setStaticGeometry(true);
     m_Root = new Node(m_Drawable);
 
     m_Material = m_Drawable->getProperty<Material>();
-    m_Material->setAmbient(0.5f, 0.5f, 0.5f, 1.0f);
+    m_Material->setAmbient(0.2f, 0.2f, 0.2f, 1.0f);
     m_Material->setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-    m_Material->setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+    m_Material->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
     m_Material->setEmission(0.0f, 0.0f, 0.0f, 1.0f);
     m_Material->setShininess(64.0f);
 

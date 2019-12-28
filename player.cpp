@@ -1,4 +1,4 @@
-#include "cspieler.h"
+#include "player.h"
 #include "inputregistry.h"
 #include "openglwidget.h"
 #include "scenemanager.h"
@@ -6,7 +6,7 @@
 #include "color.h"
 #include "world.h"
 
-cSpieler::cSpieler(Camera * camera) : CameraController(camera)
+Player::Player(Camera * camera) : CameraController(camera)
 {
     QString path(SRCDIR);
     m_PhysicEngine = nullptr;
@@ -18,12 +18,12 @@ cSpieler::cSpieler(Camera * camera) : CameraController(camera)
     keyIn = InputRegistry::getInstance().getKeyboardInput();
 }
 
-cSpieler::~cSpieler()
+Player::~Player()
 {
 
 }
 
-void cSpieler::createCrosshair()
+void Player::createCrosshair()
 {
     if ( ! m_bCrosshairFirst )
     {
@@ -51,7 +51,7 @@ void cSpieler::createCrosshair()
 }
 
 
-PhysicObject* cSpieler::getObjectInViewDirection()
+PhysicObject* Player::getObjectInViewDirection()
 {
     if ( m_PhysicEngine )
     {
@@ -67,7 +67,7 @@ PhysicObject* cSpieler::getObjectInViewDirection()
 
 
 
-void cSpieler::moveObject()
+void Player::moveObject()
 {
         ObjectToMove = getObjectInViewDirection();
 
@@ -94,7 +94,7 @@ void cSpieler::moveObject()
         }
 }
 
-void cSpieler::playPickOrDrop(bool DropSound)
+void Player::playPickOrDrop(bool DropSound)
 {
     if (!DropSound)
     {
@@ -133,7 +133,7 @@ void cSpieler::playPickOrDrop(bool DropSound)
 }
 
 
-void cSpieler::scaleObject()
+void Player::scaleObject()
 {
 
     if ( timerForScale.elapsed() > 500 )
@@ -158,7 +158,7 @@ void cSpieler::scaleObject()
     }
 }
 
-void cSpieler::playFootStepSound()
+void Player::playFootStepSound()
 {
     if ( timerForSounds.elapsed() >  1200 )     //1.2 SEKUNDEN GEHT DIE SOUNDFILE
     {
@@ -168,7 +168,7 @@ void cSpieler::playFootStepSound()
     }
 }
 
-void cSpieler::playItemDropSound()
+void Player::playItemDropSound()
 {
     if ( timerForItemDrop.elapsed() >  300 && m_bPickedUp)
     {
@@ -178,7 +178,7 @@ void cSpieler::playItemDropSound()
     }
 }
 
-void cSpieler::playItemPickUpFailSound()
+void Player::playItemPickUpFailSound()
 {
     if ( timerForSounds.elapsed() > 400 )
     {
@@ -189,7 +189,7 @@ void cSpieler::playItemPickUpFailSound()
 }
 
 
-void cSpieler::isPressed()
+void Player::isPressed()
 {
     if (keyIn->isKeyPressed('e'))
         {
@@ -216,7 +216,7 @@ void cSpieler::isPressed()
 }
 
 
-void cSpieler::controlCamera()
+void Player::controlCamera()
 {
 
 
@@ -317,9 +317,9 @@ void cSpieler::controlCamera()
 
 }
 
-void cSpieler::checkIfInField()
+void Player::checkIfInField()
 {
-    float val = 23.5f;
+    float val = 23.7f;
 
     if ( m_cam->getPosition().x() < - val )
         m_cam->setPosition(-val, m_cam->getPosition().y(),m_cam->getPosition().z() );
@@ -333,18 +333,18 @@ void cSpieler::checkIfInField()
 }
 
 
-void cSpieler::setRoot(Node * root)
+void Player::setRoot(Node * root)
 {
     m_rootNode = root;
 }
 
 
-void cSpieler::setPhysicEngine(PhysicEngine *PhysicEngine)
+void Player::setPhysicEngine(PhysicEngine *PhysicEngine)
 {
     m_PhysicEngine = PhysicEngine;
 }
 
-Camera *cSpieler::getCamera()
+Camera *Player::getCamera()
 {
     return m_cam;
 }

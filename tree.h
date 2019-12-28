@@ -1,5 +1,6 @@
-#ifndef CTREE_H
-#define CTREE_H
+#ifndef TREE_H
+#define TREE_H
+
 #include "node.h"
 #include "drawable.h"
 #include "trianglemesh.h"
@@ -10,12 +11,12 @@
 #include "shader.h"
 
 
-class cTree: public Objects
+class Tree: public Objects
 {
     public:
-            cTree();
-            ~cTree();
-            void init(float fScale, PhysicEngine *pe, Shader *s);
+            Tree();
+            ~Tree();
+            void init(float fScale, PhysicEngine *pe);
 
     private:
             static TriangleMesh * m_tmKrone;
@@ -26,7 +27,7 @@ class cTree: public Objects
             Drawable * m_DrawKrone;
             Drawable * m_DrawStamm;
             Material *m_MatKrone, *m_MatStamm;
-            Transformation *m_TransKrone, *m_TransScale;
+            Transformation *m_TransScale;
             Node *m_NodeRoot, *m_NodeKrone, *m_NodeStamm, *m_NodeTransKrone, *m_NodeTransScale;
 };
 

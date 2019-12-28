@@ -1,38 +1,36 @@
-#include "cwand.h"
+#include "wall.h"
 #include "shadermanager.h"
 #include "ownplane.h"
 #include "modeltransformation.h"
 
-Geometry* cWand::m_Geo = new OwnPlane(50.0f, 5.0f);
-
-cWand::cWand()
+Wall::Wall()
 {
 
 }
 
-cWand::~cWand()
+Wall::~Wall()
 {
 
 }
 
-void cWand::init(Shader *s, PhysicEngine *pe, Texture *tex, BumpMap *bm)
+void Wall::init(PhysicEngine *physicEngine, Texture *texture, BumpMap *bumpMap, Shader *shader, Geometry *geometry)
 {
     m_Root = new Node();
-    m_Shader = s;
-    m_BumpMap = bm;
-    m_Texture = tex;
-    m_PhysicEngine = pe;
+    m_PhysicEngine = physicEngine;
+    m_Texture = texture;
+    m_BumpMap = bumpMap;
+    m_Shader = shader;
+    m_Geometry = geometry;
 
     initWand(25.0f, 0.0f, QVector3D(0.0f, 1.0f, 0.0f), -90.0f);
     initWand(0.0f, 25.0f, QVector3D(0.0f, 0.0f, 0.0f), 0.0f);
     initWand(-25.0f, 0.0f, QVector3D(0.0f, 1.0f, 0.0f), 90.0f);
     initWand(0.0f, -25.0f, QVector3D(0.0f, 0.0f, 0.0f), 0.0f);
-
 }
 
-void cWand::initWand(float transX, float transZ, QVector3D rotAxis, float angle)
+void Wall::initWand(float transX, float transZ, QVector3D rotAxis, float angle)
 {
-    m_Drawable = new Drawable(m_Geo);
+    m_Drawable = new Drawable(m_Geometry);
     m_Drawable->setStaticGeometry(true);
 
     m_Drawable->getProperty<ModelTransformation>()->translate(transX, 0.0f, transZ);
@@ -43,9 +41,9 @@ void cWand::initWand(float transX, float transZ, QVector3D rotAxis, float angle)
 
     m_Material = new Material();
     m_Material = m_Drawable->getProperty<Material>();
-    m_Material->setAmbient(0.5f, 0.5f, 0.5f, 1.0f);
+    m_Material->setAmbient(0.2f, 0.2f, 0.2f, 1.0f);
     m_Material->setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
-    m_Material->setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+    m_Material->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
     m_Material->setEmission(0.0f, 0.0f, 0.0f, 1.0f);
     m_Material->setShininess(64.0f);
 

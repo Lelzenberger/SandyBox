@@ -8,10 +8,8 @@ class Cube : public Objects
 public:
     Cube();
     ~Cube();
-    void init(PhysicEngine *physicEngine);
+    void init(PhysicEngine *physicEngine, Texture *texture, BumpMap *bumpMap, Shader *shader, Geometry *geometry);
     PhysicObjectConstructionInfo* returnConstructionInfo();
-private:
-    static Geometry *m_Geometry;
 };
 
 #endif

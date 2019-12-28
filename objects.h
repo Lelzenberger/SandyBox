@@ -15,6 +15,7 @@ public:
 
 protected:
     Node *m_Root;
+    Geometry *m_Geometry;
     Material *m_Material;
     Shader *m_Shader;
     Drawable *m_Drawable;

@@ -4,11 +4,11 @@ TARGET = SandyBox
 
 SOURCES += \
     objects.cpp \
-    cskybox.cpp \
-    cspieler.cpp \
-    cszene.cpp \
-    ctree.cpp \
-    cwand.cpp \
+    skybox.cpp \
+    player.cpp \
+    ownscene.cpp \
+    tree.cpp \
+    wall.cpp \
     world.cpp \
     cube.cpp \
     ownplane.cpp\
@@ -16,11 +16,11 @@ SOURCES += \
 
 HEADERS += \
     objects.h \
-    cskybox.h \
-    cspieler.h \
-    cszene.h \
-    ctree.h \
-    cwand.h \
+    skybox.h \
+    player.h \
+    ownscene.h \
+    tree.h \
+    wall.h \
     world.h \
     cube.h \
     ownplane.h \
