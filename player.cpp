@@ -148,11 +148,10 @@ void Player::scaleObject()
                                           0,0,2,0,
                                           0,0,0,1);
             QMatrix4x4 matrixObjekt = ObjectToMove->getEngineModelMatrix();
-            matrixObjekt =   Scale * matrixObjekt;
+            matrixObjekt =  matrixObjekt * Scale;
             ObjectToMove->removeFromPhysicEngine();
-            ObjectToMove->setGeometryModelMatrix(&matrixObjekt);
+            ObjectToMove->setEngineModelMatrix(matrixObjekt);
             ObjectToMove->addToPhysicEngine();
-            //ObjectToMove->getGeometry()->setModelMatrix(matrixObjekt);
             timerForScale.restart();
         }
     }
