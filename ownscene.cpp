@@ -23,8 +23,8 @@ PhysicEngine* OwnScene::getPhysicEngine()
 
 void OwnScene::initWorld()
 {
-    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Ground_Forest_002_baseColor.jpg"));
-    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Ground_Forest_002_normal.jpg"));
+    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Vol_41_7_Base_Color.png"));
+    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Vol_41_7_Normal.png"));
     m_Shader = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
     m_Geometry = new OwnPlane(50.0f, 50.0f);
 
@@ -35,8 +35,8 @@ void OwnScene::initWorld()
 
 void OwnScene::initWall()
 {
-    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Wall Stone 004_COLOR.jpg"));
-    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Wall Stone 004_NRM.jpg"));
+    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Vol_41_1_Base_Color.png"));
+    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Vol_41_1_Normal.png"));
     m_Shader = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
     m_Geometry = new OwnPlane(50.0f, 3.0f);
 
@@ -76,8 +76,8 @@ void OwnScene::initSkyBox()
 
 void OwnScene::initCubes()
 {
-    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Brick_wall_007_COLOR"));
-    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Brick_wall_007_NRM"));
+    m_Texture = new Texture(SRCDIR + QString("/modelstextures/Vol_41_5_Base_Color.png"));
+    m_BumpMap = new BumpMap(SRCDIR + QString("/modelstextures/Vol_41_5_Normal.png"));
     m_Shader = ShaderManager::getShader<Shader>("://shaders/textureLightedBump.vert", "://shaders/textureLightedBump.frag");
     m_Geometry = new SimpleCube(0.8f);
 
