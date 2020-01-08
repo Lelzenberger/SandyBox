@@ -36,11 +36,7 @@ void Cube::init(PhysicEngine *physicEngine, Texture *texture, BumpMap *bumpMap, 
 
     m_PhysicObject = m_PhysicEngine->createNewPhysicObject(m_Drawable);
     m_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
-<<<<<<< HEAD:cwuerfel.cpp
-    m_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f));
-=======
     m_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.4f, 0.4f, 0.4f));
->>>>>>> thomas:cube.cpp
     m_PhysicObjectConstructionInfo->setCcdActivation(true);
     m_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxHalfExtends);
     m_PhysicObjectConstructionInfo->setFriction(0.5f);
