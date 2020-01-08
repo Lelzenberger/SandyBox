@@ -1,16 +1,17 @@
 #include "scenemanager.h"
 #include "screenrenderer.h"
 #include "mousekeyboardcameracontroller.h"
-#include "cspieler.h"
-#include "cszene.h"
+#include "player.h"
+#include "ownscene.h"
 
 Node* initScene1();
 Camera * cam;
-cSpieler * Spieler;
+Player * Spieler;
+
 void SceneManager::initScenes()
 {
     cam = new Camera();
-    Spieler = new cSpieler(cam);
+    Spieler = new Player(cam);
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
@@ -23,12 +24,11 @@ void SceneManager::initScenes()
 
 Node* initScene1()
 {
-
-
-    cSzene *sz = new cSzene();
+    OwnScene *sz = new OwnScene();
     Node *root = new Node();
     root = sz->init();
     Spieler->setCamera(cam);
     Spieler->setPhysicEngine(sz->getPhysicEngine());
+    Spieler->setRoot(root);
     return (root);
 }
